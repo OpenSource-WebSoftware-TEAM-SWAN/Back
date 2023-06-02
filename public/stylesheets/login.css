@@ -1,0 +1,206 @@
+body {
+    opacity: 1;
+    transition-duration: 3s;
+    transition-property: opacity;
+    background-image: url(/images/night6.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+body.fade {
+    opacity: 0;
+}
+
+a {
+    color: #d2d2d2;
+    text-decoration: none;
+    outline: none
+}
+
+a:hover,
+a:active {
+    text-decoration: none;
+    color: #000C3E;
+}
+
+.container-login {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 33.33% 33.33% 33.33%;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "header header header header"
+        "swan swan login-wrapper login-wrapper"
+        "footer footer footer footer";
+}
+
+.header {
+    grid-area: header;
+}
+
+#swan {
+    text-align: center;
+    grid-area: swan;
+    font-family: 'fira';
+    font-style: normal;
+    font-weight: 2000;
+    font-size: 150px;
+    margin-top: -30px;
+    color: #FFFFFF;
+}
+
+.swanlogo {
+    position: relative;
+    -webkit-text-stroke: 0px gray;
+    text-shadow: 10px 4px 4px rgba(0, 0, 0, 0.25);
+    top: 130px;
+    right: 33px;
+}
+
+.logo-orange {
+    position: relative;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-bottom: 7.5px solid transparent;
+    border-top: 7.5px solid transparent;
+    border-left: 12.75px solid #f26322;
+    border-right: 12.5px solid transparent;
+    left: -142px;
+    top: 233px;
+    transform: rotate(162.5deg);
+    z-index: 1;
+}
+
+.logo-black {
+    position: relative;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    border-bottom: 7.65px solid transparent;
+    border-top: 7.65px solid transparent;
+    border-left: 12.95px solid #000C3E;
+    border-right: 12.95px solid transparent;
+    left: -131px;
+    top: 208px;
+    transform: rotate(-16.5deg);
+    z-index: 1;
+}
+
+.login-wrapper {
+    grid-area: login-wrapper;
+    margin: 0 auto;
+}
+
+/* @media (max-width: 1000px) {   
+    .container {    
+        grid-template-columns: 1fr;    
+        grid-template-areas:          
+        "swan"     
+        "login-wrapper"     
+        "footer";   
+}} */
+.modal-content {
+    background-color: #000C3E;
+    border: 2px solid white;
+}
+
+.modal-body {
+    padding: 10px 30px;
+}
+
+.modal-header {
+    color: white;
+}
+
+.login-wrapper {
+    width: 400px;
+    height: 400px;
+    padding: 40px;
+    box-sizing: border-box;
+    border: 2px solid #D2D2D2;
+    border-radius: 20px;
+    font-family: 'melona';
+    margin-top: 40px;
+    background-color: #000C3E;
+    z-index: 1000;
+}
+
+.login-wrapper>h3 {
+    font-size: 16px;
+    color: #000C3E;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    float: right;
+}
+
+#login-form>input {
+    width: 100%;
+    height: 48px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    background-color: #F8F8F8;
+    font-family: 'melona';
+}
+
+#login-form>input::placeholder {
+    color: #D2D2D2;
+}
+
+#login-form>input[type="submit"] {
+    color: #fff;
+    font-size: 16px;
+    background-color: #C0DFFD;
+    margin-top: 20px;
+    font-family: 'melona';
+}
+
+#login-form>input[type="checkbox"] {
+    display: none;
+}
+
+#login-form>label {
+    color: #999999;
+}
+
+#login-form input[type="checkbox"]+label {
+    cursor: pointer;
+    padding-left: 26px;
+    background-image: url("checkbox.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#login-form input[type="checkbox"]:checked+label {
+    background-image: url("checkbox-active.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#login-form .register {
+    text-align: right;
+    margin: 0 auto;
+    padding: 3px;
+}
+
+#login-form a:hover {
+    color: #f26322
+}
+
+@font-face {
+    font-family: 'melona';
+    src: url('/fonts/BinggraeMelona-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'fira';
+    src: url('fonts/FiraSansExtraCondensed-Regular.ttf') format('truetype');
+}
+
+#placeholder {
+    font-family: 'melona';
+}

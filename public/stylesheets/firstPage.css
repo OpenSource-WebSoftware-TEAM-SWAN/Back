@@ -1,0 +1,168 @@
+body{
+    width: 100%;
+    height: 100%;
+    font-family: 'melona';
+    background-color: white;
+}
+
+@font-face {
+    font-family: 'melona';
+    src: url('/fonts/BinggraeMelona-Bold.ttf') format('truetype');
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-200px);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-200px);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        left: 40%;
+    }
+
+    100% {
+        opacity: 1;
+        left: 50%;
+    }
+}
+
+/* 전체 레이아웃 */
+.container-fluid.main-page {
+    padding: 0;
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 0.2fr 1.8fr;
+    grid-template-rows: 2.5fr 1fr;
+    gap: 8px;
+    align-items: center;
+    background-color: #e4e4e4;
+
+}
+
+/* 달성률과 캘린더 레아아웃 */
+.headline {
+    height: 100%;
+    grid-column: 1/3;
+    grid-row: 1/3;
+    background-color: #e4e4e4;;
+    box-sizing: border-box;
+    display: block;
+    padding: 20px;
+    width: 100%;
+    justify-content: flex-end;
+    transition: all 0.6s ease-in-out;
+}
+
+.main-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.main-nav.slide-in.active+.headline {
+    width: 83%;
+    margin-left: 17%;
+}
+
+.headline .recent-item {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.headline .recent-text {
+    background-color: #fff;
+    position: relative;
+    width: 49%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #000c3e;
+    overflow-y: hidden;
+}
+
+.recent-text::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.headline .recent-img {
+    background-color: #fff;
+    width: 49%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #000c3e;
+}
+
+.recent-text .mycal {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* 모든 이미지 레이아웃 */
+.images-btn {
+    position: absolute;
+    top: -27%;
+    transform: rotate(-90deg);
+}
+
+.all-images {
+    display: flex;
+    position: relative;
+    height: 100%;
+    grid-column: 1/3;
+    grid-row: 4/5;
+    background-color: #e4e4e4;
+    justify-content: space-around;
+    padding: 10px;
+    width: 100%;
+    transition: all 0.6s ease-in-out;
+    z-index: 1;
+}
+
+.main-nav.slide-in.active~.all-images {
+    width: 83%;
+    margin-left: 17%;
+}
+
+.all-images img {
+    border: 2px solid black;
+    border-radius: 1px;
+}
+
+#images-modal {
+    margin-top: 200px;
+    animation-duration: .5s;
+    animation-fill-mode: both;
+}
+
+#images-modal.slide-in {
+    animation-name: slideIn;
+}
+
+#images-modal.slide-out {
+    animation-name: slideOut;
+}
+.all-images-full-screen{
+    height: 100vh;
+}

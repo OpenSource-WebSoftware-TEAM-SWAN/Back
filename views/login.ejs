@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.rtl.min.css">
+    <link href="/stylesheets/login.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/bootstrap-5.3.0-alpha3-dist/js/bootstrap.min.js" defer></script>
+
+    <title>SWAN</title>
+</head>
+
+<body class="fade">
+
+
+    <div class="container-login">
+        <div class="header"></div>
+        <div id="swan">
+            <div class="logo-orange"></div>
+            <div class="logo-black"></div>
+            <p class="swanlogo fw-bold">SWAN</p>
+        </div>
+
+        <div class="login-wrapper">
+            <h3><a href="prototype.html">With your a little step</a></h3>
+            <img src="/images/white-icon-swan.png" alt="" width="40px" height="40px">
+            <form id="login-form" action="/swan" method="post">
+                <input type="text" name="userID" placeholder="Email" id="LOGIN_ID" autofocus>
+                <input type="password" name="userPW" placeholder="Password" id="LOGIN_PW">
+                <label for="remember-check">
+                    <input type="checkbox" id="remember-check">Remember ID
+                </label>
+                <input type="submit" value="Login" id="LOGIN_BTN" disabled>
+                <p class="register" id="registerBtn"><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></p>
+            </form>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal register-modal" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registerModalLabel">Register</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form id="login-form" action="/register" method="post">
+                            <input type="text" name="signUpID" placeholder="Email" id="SIGNUP_ID" autofocus>
+                            <input type="text" name="signUpName" placeholder="Name" id="SIGNUP_NAME" autofocus>
+                            <input type="password" name="signUpPW" placeholder="Password" id="SIGNUP_PW">
+                            <input type="password" name="confirmPW" placeholder="confirm Password" id="CONFIRM_PW">
+                            <input type="submit" value="Register" id="SIGNUP_BTN" disabled>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const signupId=$('#SIGNUP_ID');
+        const signupPw=$('#SIGNUP_PW');
+        const confirmPw=$('#CONFIRM_PW');
+        const signupName=$('#SIGNUP_NAME');
+        const id=$('#LOGIN_ID');
+        const pw=$('#LOGIN_PW');
+        document.addEventListener('DOMContentLoaded', () => {
+            window.setTimeout(() => {
+                document.body.classList.remove('fade');
+                return false;
+            });
+        });
+        const loginId = document.getElementById('LOGIN_ID');
+        const loginPw = document.getElementById('LOGIN_PW');
+        const loginBtn = document.getElementById('LOGIN_BTN');
+        
+
+        function color() {
+            if ((loginId.value.length > 0 && loginId.value.indexOf("@") !== -1)
+                && loginPw.value.length >= 4) {
+                loginBtn.style.backgroundColor = "#F7591D";
+                loginBtn.disabled = false;
+            } else {
+                loginBtn.style.backgroundColor = "#acb0ac";
+                loginBtn.disabled = true;
+            }
+        }
+
+        function hovering() {
+            loginBtn.style.opacity = "0.9";
+        }
+
+        function unhovering() {
+            loginBtn.style.opacity = "1.0";
+        }
+
+        function moveToMain() {
+            location.replace("www.google.com");
+        }
+
+        loginId.addEventListener('keyup', color);
+        loginPw.addEventListener('keyup', color);
+        loginBtn.addEventListener('click', moveToMain);
+        loginBtn.addEventListener('mouseover', hovering);
+        loginBtn.addEventListener('mouseout', unhovering);
+        $('#registerBtn').click(function(e){
+			e.preventDefault();
+			$('#registerModal').modal("show");
+		});
+
+        $(document).ready(function() {
+            // 비밀번호 입력 요소 가져오기
+            var signUpPW = $('#SIGNUP_PW');
+            var confirmPW = $('#CONFIRM_PW');
+            var signUpBtn = $('#SIGNUP_BTN');
+            
+            // 비밀번호 일치 여부를 확인하고 버튼을 활성화/비활성화하는 함수
+            function checkPasswords() {
+              if (signUpPW.val()!='' & confirmPW!=''&(signUpPW.val() === confirmPW.val()) ) {
+                signUpBtn.css('background-color','#F7591D');
+                signUpBtn.prop('disabled', false);
+              } 
+              else {
+                signUpBtn.css('background-color','lightgray');
+                signUpBtn.prop('disabled', true);
+
+              }
+            }
+            
+            // checkPasswords 함수를 비밀번호 입력 요소의 keyup 이벤트에 연결
+            signUpPW.keyup(checkPasswords);
+            confirmPW.keyup(checkPasswords);
+          });
+          
+    </script>
+</body>
+
+</html>
