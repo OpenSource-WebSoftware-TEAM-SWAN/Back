@@ -1,8 +1,13 @@
 a{
     text-decoration: none !important;
+}
+
+aGoal{
+    width: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-lines: 1;
 }
 
 li{
@@ -15,11 +20,8 @@ li{
 }
 
 .btnNaviBar{
-    left: -5.8%;
-    width: 7.5%;
-    max-width: 200px;
-    min-width: 100px;
-    padding: 0.5% 0 0.5% 5.8%;
+    width: 40px;
+    padding: 6px 0;
     margin: 0;
     top: 5%;
     position: absolute;
@@ -36,10 +38,11 @@ li{
 }
 
 .btnNaviBar:hover{
+    width: 45px;
+    padding-left: 5px;
     background-color: #f26322;
     box-shadow: 2px 0px 4px white;
-    left: -5.4%;
-    padding: 0.5% 0 0.5% 5.4%;
+    transition-duration: 0.2s;
     opacity: 1;
 }
 
@@ -92,13 +95,11 @@ li{
 }
 
 .btntoTop{
+    padding: 4px 8px;
     position: fixed;
-    padding: 0.3% 0.7%;
-    left: -2%;
     bottom: 2%;
     text-align: right;
     background-color: #acb0ac;
-    width: 5%;
     border-top-right-radius: 6px;
     border-bottom-right-radius: 6px;
 }

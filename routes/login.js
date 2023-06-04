@@ -5,10 +5,13 @@ var router = express.Router();
 // const fs=require('fs');
 const { stringify } = require('querystring');
 const { LocalStorage } = require('node-localstorage');
+const fs = require('fs');
 const crypto = require('crypto');
-const fs=require('fs');
+
+
 // 로컬 스토리지 인스턴스 생성
-const localStorage = new LocalStorage('./scratch');
+const localStorage = new LocalStorage('./scratch/userJSON');
+const contnetLocalStorage = new LocalStorage('./scratch/contentJSON');
 
 // 파일 구조 //
 var headings = {
@@ -40,12 +43,8 @@ var headings = {
 //   return result;
 // }
 
-
-
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  
   res.render('login');
 });
 
@@ -55,76 +54,84 @@ router.post('/register', function (req, res) {
   const pw = req.body.signUpPW;
   const name = req.body.signUpName;
 
-  let userCnt;
-  let maxCnt=0;
-  const files = fs.readdirSync('./scratch');
-  files.forEach((user) => {
-    let temp = Number(user.slice(4));
-    if (maxCnt < temp) maxCnt = temp;
-  });
+  let userArray = [];
+  let maxPk = 0;
 
- 
-  
-  localStorage.setItem("user"+(maxCnt+1), JSON.stringify({ 'email': email, 'pw': pw, 'name': name }))
-  // localStorage.setItem("userEmail", email);
-  // localStorage.setItem("userPw", pw);
-  // localStorage.setItem("userName", name);
+  let checkUserJson = localStorage.getItem("user");
+  if (checkUserJson) {
+    console.log(checkUserJson);
+    userArray = JSON.parse(checkUserJson);
+    // 현재 사용자 리스트에서 가장 큰 pk 값을 찾음
+    userArray.forEach((user) => {
+      if (user.pk > maxPk) {
+        maxPk = user.pk;
+      }
+    });
+  }
 
+  const newUser = {
+    pk: maxPk + 1,
+    email: email,
+    pw: pw,
+    name: name
+  };
+  userArray.push(newUser);
+
+  localStorage.setItem("user", JSON.stringify(userArray));
+
+  // res.sendStatus(200);
 
   res.send('<script>alert("회원가입에 성공했습니다."); window.location.href="/";</script>');
-
 });
+
+
 router.post('/swan', function (req, res) {
-  console.log(req.body);
   const email = req.body.userID;
   const pw = req.body.userPW;
-  let userCnt;
-  let loginUser
-  // const storedEmail = localStorage.getItem('userEmail');
-  // const storedPw = localStorage.getItem('userPw');
-  const files = fs.readdirSync('./scratch');
-  files.forEach((user) => {
-    if(JSON.parse(localStorage.getItem(user))['email']==email){
-      loginUser=user;
+
+  let loginUser = null;
+
+  const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
+  const userArray = JSON.parse(userJSONFile);
+
+  userArray.forEach((user) => {
+    if (user.email === email && user.pw === pw) {
+      loginUser = user;
       return;
     }
   });
-  const storedUser = JSON.parse(localStorage.getItem(loginUser));
-  console.log(storedUser);
+
   
-  if (email === storedUser['email'] && pw === storedUser['pw']) {
+  if (loginUser) {
     // 로그인 성공
+    const authUser = loginUser.pk; // loginUser 객체에서 pk 속성에 접근하여 authUser 변수에 할당
+
+    let titleArray = [];
+    let userContent = [];
+
+    let checkTitleJson = contnetLocalStorage.getItem("title");
     
-    // const storedHeadings = JSON.parse(localStorage.getItem('headings')) || {};
+    if (checkTitleJson) {
+      titleArray = JSON.parse(checkTitleJson);
 
-    // let newSubTitle = {
-    //   'newfeed': {
-    //     'title': 'test title',
-    //     'content': 'test content',
-    //     'image': 'test image'
-    //   }
-    // };
-    // let newFeed = {
-    //   'title': 'test title',
-    //   'content': 'test content',
-    //   'image': 'test image'
-    // }
-    // newSubTitle['newfeed'] = newFeed;
-    // storedHeadings['Title1']['newSubTitle'] = newSubTitle;
+      titleArray.forEach((title) => {
+        if (title.userPK === authUser) {
+          userContent.push(title);
+        }
+      });
+    }
+    console.log("fucking hell : "+ userContent);
+    
+    // module.exports = { loginUser, userContent };
+    module.exports.loginUser=loginUser;
+    module.exports.userContent=userContent;
 
-    // console.log(storedHeadings);
-    console.log(storedUser['name']);
-    res.render('swan', { userName: storedUser['name'] });
-
-
-
+    res.render('swan', { userName: loginUser.name, userContent: userContent });
   } else {
-    // 로그인 실패   => login redirect
+    // 로그인 실패
     res.send("<script>alert('로그인 실패');window.location.href='/'</script>");
   }
 });
 
-
-
-
 module.exports = router;
+// exports.router=router;

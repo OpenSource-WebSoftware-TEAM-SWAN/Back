@@ -17,6 +17,7 @@
     "jade": "~1.11.0",
     "localstorage": "^1.0.1",
     "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
     "node-localstorage": "^2.2.1"
   },
   "devDependencies": {

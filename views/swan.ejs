@@ -1,182 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap-grid.css">
-    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.rtl.min.css">
-
-    <link rel="stylesheet" href="/stylesheets/navibar.css">
     <link rel="stylesheet" href="/stylesheets/firstPage.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/navibar.css">
+    <link rel="stylesheet" href="/stylesheets/writeSeed.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="/bootstrap-5.3.0-alpha3-dist/js/bootstrap.min.js" defer></script>
     <script defer src="/javascripts/mainJquery.js"></script>
-    <script src="/javascripts/fullScreenScroll.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.min.js"></script>
+    <script src="/javascripts/barchart.js"></script>
     <script defer src="/javascripts/navibar.js"></script>
-    <!-- <script src="/javascripts/barchart.js"></script> -->
-    <title>FirstPage</title>
+    <script defer src="/javascripts/fullScreenScroll.js"></script>
+    <script defer src="/javascripts/firstPage.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/fullpage.min.css">
+
+    <title>SWAN</title>
 </head>
 
 <body>
-    <!--네비바 버튼-------------------------------------------------------->
-    <div class="whole-layout">
-        <button class="btnNaviBar">
-            S<br>W<br>A<br>N
-        </button>
-        <div class="navModal">
-            <div>
+  <!--네비바 버튼-------------------------------------------------------->
+  <button class="btnNaviBar">
+    S<br>W<br>A<br>N
+  </button>
+  <div class="navModal">
+    <div>
+      
+    </div>
+    <div class="main-nav">
+      <!-- user brief info -->
+      <div class="user-info" id="navTop">
+          <div class="user-infoImg">
+              <img src="/images/profile.jpg" alt="user image" style="width: 100%;">
+          </div>
+          <div class="user-infoStat">
+              <p id="userName"><%= userName %></p>
+              <p id="userIntro">오늘도 힘차고 굳센 하루!</p>
+          </div>
+      </div>
+      <!-- END user brief unfo -->
 
+      <!-- Recent Seeds-->
+      <div class="divSearch">
+          <form action="">
+              <input id="searchBox" type="text">
+              <button class="btnSearch"><img class="imgSearch" src="images/button_search.png" alt="search"></button>
+          </form>
+      </div>
+      <div class="divRecentSeed">
+          <div class="divRecentSeedIn">
+              <button class="btnRecentSeed"><img class="imgToggle" src="images/button_down.png" alt="down">&nbsp;최근&nbsp;항목</button>
+          </div>
+      </div>
+      <div class="divRecentSeedOpen">
+          <div class="divRecentContent">
+              <a href="">seed1</a><br>
+              <a href="">seed2</a><br>
+              <a href="">seed3</a><br>
+          </div>
+      </div>
+      <!-- END Recent Seeds -->
+
+      <!-- headline toggle -->
+      <button class="add-title">버킷리스트 추가</button>
+      <div class="headline-info" id="headline">
+        <% userContent.forEach(function(item) { %>
+          <%- include('navContent',{userItem:item}) %>
+        <% }) %>
+        </div class="btntoTop">
+      <!-- END headline toggle -->
+      <div class="btntoTop">
+        <a href="#navTop">Top</a>
+      </div>
+    </div>
+  </div>
+  <!---------------------------------------------------------->
+<div id="fullpage">
+  <div class="whole-layout section">
+  <div id="pageHeader">
+    <h1 class="swan-logo">SWAN</h1>
+    <div class="logout-btn">
+        <button class="btnLogout" onclick="">Logout</button>
+    </div>
+  </div>
+  <div id="tabs">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 col-md-4 col-lg-3" id="row-calendar">
+                <!-- <iframe src="./calendar/calendar.html" frameborder="0" class="mycal" width="480" height="480"></iframe> -->
+                <%- include('calendar') %>
             </div>
-            <div class="main-nav">
-                <!-- user brief info -->
-                <div class="user-info" id="navTop">
-                    <div class="user-infoImg">
-                        <img src="./images/profile.jpg" alt="user image" style="width: 100%;">
-                    </div>
-                    <div class="user-infoStat">
-                        <p id="userName">
-                            <%= userName %>
-                        </p>
-                        <p id="userIntro">오늘도 힘차고 굳센 하루!</p>
-                    </div>
-                </div>
-                <!-- END user brief unfo -->
-
-                <!-- Recent Seeds-->
-                <div class="divSearch">
-                    <form action="">
-                        <input id="searchBox" type="text">
-                        <button class="btnSearch"><img class="imgSearch" src="/images/button_search.png"
-                                alt="search"></button>
-                    </form>
-                </div>
-                <div class="divRecentSeed">
-                    <div class="divRecentSeedIn">
-                        <button class="btnRecentSeed"><img class="imgToggle" src="/images/button_down.png"
-                                alt="down">&nbsp;최근&nbsp;항목</button>
-                    </div>
-                </div>
-                <div class="divRecentSeedOpen">
-                    <div class="divRecentContent">
-                        <a href="">seed1</a><br>
-                        <a href="">seed2</a><br>
-                        <a href="">seed3</a><br>
-                    </div>
-                </div>
-                <!-- END Recent Seeds -->
-
-                <!-- headline toggle -->
-                <button class="add-title">새 목표 추가</button>
-                <div class="headline-info" id="headline">
-                        <%- include('navContent') %>
-                </div>
-                <!-- END headline toggle -->
-                <div class="btntoTop">
-                    <a href="#navTop">Top</a>
-                </div>
+            <div class="col-6 col-md-4 col-lg-3" id="row-chart">
+                <canvas id="myChart" style="z-index: 1000;" width="480" height="480"></canvas>
             </div>
-        </div>
-        <!---------------------------------------------------------->
-
-        <!-- whole layout -->
-        <div class="container-fluid main-page box">
-            <!-- Main feature Grid -->
-            <div class="headline">
-                <div class="recent-item">
-                    <div class="recent-text">
-                        <%- include('calendar') %>
-
-                            <!-- <iframe src="./calendar.html" frameborder="0" class="mycal"></iframe> -->
-                    </div>
-                    <div class="recent-img">
-                        <canvas id="myChart" width="420px" height="320px" style="z-index: 1000;"></canvas>
-                    </div>
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <script>
-                        const ctx = document.getElementById('myChart');
-
-                        new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                                datasets: [{
-                                    label: '# of Votes',
-                                    data: [12, 19, 3, 5, 2, 3],
-                                    borderWidth: 1,
-                                    backgroundColor: [
-                                        'rgba(0, 12, 62, 0.75)',
-                                        'rgba(0, 12, 62, 0.75)',
-                                        'rgba(0, 12, 62, 0.75)',
-                                        'rgba(0, 12, 62, 0.75)',
-                                        'rgba(0, 12, 62, 0.75)',
-                                        'rgba(0, 12, 62, 0.75)'
-                                    ],
-                                    borderColor: [
-                                        'rgba(0, 12, 62, 1)',
-                                        'rgba(0, 12, 62, 1)',
-                                        'rgba(0, 12, 62, 1)',
-                                        'rgba(0, 12, 62, 1)',
-                                        'rgba(0, 12, 62, 1)',
-                                        'rgba(0, 12, 62, 1)'
-                                    ]
-                                }]
-                            },
-                            options: {
-                                indexAxis: 'y',
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    </script>
-                </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             </div>
-            <!-- END Main feature -->
-
-            <!-- All images contain Grid -->
-            <div class="all-images">
-                <div class="images-btn">
-                    <button class="btn btn-secondary" style="height:100px;padding:3px" data-bs-toggle="modal"
-                        data-bs-target="#images-modal">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-caret-right-fill" viewBox="0 0 16 16">
-                            <path
-                                d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                        </svg>
-                    </button>
-                </div>
-                <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170"> <!-- 사진 누르면 시드  -->
-                <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-                <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-                <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-                <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-                <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-            </div>
-        </div>
-        <!-- END whole grid section -->
-
-        <div class="box all-images-full-screen">
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170"> <!-- 사진 누르면 시드  -->
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-            <img src="/images/sameple_image.jpeg" alt="#" width="200" height="170">
-        </div>
-
-        <div id="images-modal" class="modal modal-transition" data-bs-backdrop="static" data-bs-keyboard="false"
-            tabindex="-1" aria-hidden="true">
-
-            <!-- imagesModal.html Load -->
         </div>
     </div>
-</body>
+</div>
 
+<div class="downpage section">
+    <div class="container-fluid">
+        <div class="row" id="images-container" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/tower.jpg" class="card-img-top">
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/루브르.jpg" class="card-img-top">
+          </div>
+        </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/monarisa.jpg" class="card-img-top">
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/tower.jpg" class="card-img-top">
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/tower.jpg" class="card-img-top">
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/루브르.jpg" class="card-img-top">
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="card">
+              <img src="/images/monarisa.jpg" class="card-img-top">
+            </div>
+          </div>
+      </div><!--row closing tag-->
+    </div><!--container-fluid closing tag-->
+</div>
+</div>
+</div>
+<!--Masonry 플러그인-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/fullpage.min.js"></script>
+</body>
 </html>

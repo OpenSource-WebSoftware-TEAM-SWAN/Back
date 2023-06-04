@@ -1,0 +1,131 @@
+body {
+    opacity: 1;
+    transition-duration: 3s;
+    transition-property: opacity;
+    background-color: white; /* 흰색 배경 설정 */
+  }
+  
+  body.fade {
+    opacity: 0;
+  }
+  
+  .downpage {
+    /* background-image: url(images/night6.jpg); */
+    background-color: #fff;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .downpage img {
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 60px;
+  }
+
+  #pageHeader {
+    grid-row: 1/2;
+    text-align: left;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: #000C3E;
+    width: 70%;
+    margin: 0 auto;
+    border-bottom: 1px solid #acb0ac;
+    font-family: 'melona' !important;
+    /* margin-top: 10%; */
+}
+
+#tabs {
+position: relative;
+overflow: hidden;
+width: 100%;
+}
+
+.col-12 {
+    padding: 0px;
+}
+
+#slideImages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 60px;
+}
+
+/* #slideImages img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    overflow-y: hidden;
+  } */
+
+  .slide {
+    width: 100%;
+    flex-shrink: 0;
+  }
+  
+  .slide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .fp-controlArrow {
+    background-color: transparent;
+    color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .fp-controlArrow:before {
+    font-family: 'Font Awesome 5 Free'; /* Font Awesome 폰트 패밀리 */
+    font-weight: 900; /* Font Awesome 아이콘 두께 */
+    content: '\f0da'; /* Font Awesome 아이콘 코드 */
+    color: #acb0ac; /* 아이콘 색상: 흰색 */
+    font-size: 2rem;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto;
+  }
+
+  .fp-controlArrow:hover:before {
+    color:#000C3E;
+    transition: color 0.3s ease;
+  }
+
+  .fp-next {
+    right: 17.5% !important;
+    border-width: 0px !important;
+  }
+  
+  .fp-prev {
+    left: 17.5% !important;
+    border-width: 0px !important;
+    transform: rotate(180deg) !important;
+  }
+
+a {color: #d2d2d2; text-decoration: none; outline: none}
+
+a:hover, a:active {text-decoration: none; color:#000C3E;}
+
+@font-face {
+    font-family: 'melona';
+    src: url('fonts/BinggraeMelona-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'fira';
+    src: url('fonts/FiraSansExtraCondensed-Regular.ttf') format('truetype');
+}

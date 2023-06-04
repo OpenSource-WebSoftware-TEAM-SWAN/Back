@@ -1,0 +1,24 @@
+ul{
+    list-style: none;
+}
+
+@media (min-width:800px) {
+    .masonry-list{
+        column-count: 5;
+    }
+}
+@media (max-width:800px) {
+    .masonry-list{
+        column-count: 2;
+    }
+}
+.masonry-item{
+    display: inline-block;
+    width: 100%;
+    break-inside: avoid;
+}
+.seed-image{
+    display: flex;
+    justify-content: center;
+    border:3px solid seagreen;
+}
