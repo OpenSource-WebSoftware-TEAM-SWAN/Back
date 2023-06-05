@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 const { stringify } = require('querystring');
+const { URLSearchParams } = require('url');
 const { LocalStorage } = require('node-localstorage');
 const fs = require('fs');
 const localStorage = new LocalStorage('./scratch/contentJSON');
+const calendarLocalStorage = new LocalStorage('./scratch/calendarJSON');
 let titleArray = [];
 
 // console.log(currentUser);
@@ -17,32 +19,34 @@ router.get('/', function (req, res, next) {
 
 /* 대제목 추가 버튼 클릭 시 post  */
 router.post('/sendTitle', function (req, res) {
-  const loginUser = require('./login.js');
-  const { headTitle } = req.body;
-  let maxPk = 0;
-  let cnttitleArray = [];
+  const {loginUser,userContent} = require('./login.js');
+  const headTitle = req.body.headTitle;
+  const titlePK=req.body.titlePk;
+  // let maxPk = 0;
+  // let cnttitleArray = [];
 
-  let checkTitleJson = localStorage.getItem("title");
-  if (checkTitleJson) {
-    cnttitleArray = JSON.parse(checkTitleJson);
+  // let checkTitleJson = localStorage.getItem("title");
+  // if (checkTitleJson) {
+  //   cnttitleArray = JSON.parse(checkTitleJson);
 
-    cnttitleArray.forEach((title) => {
-      if (title.titlePK > maxPk) {
-        maxPk = title.titlePK;
-      }
-    });
-  }
+  //   cnttitleArray.forEach((title) => {
+  //     if (title.titlePK > maxPk) {
+  //       maxPk = title.titlePK;
+  //     }
+  //   });
+  // }
 
   let currentTitle = localStorage.getItem('title');
+  console.log(headTitle,titlePK);
   if (currentTitle) {
     currentTitle = JSON.parse(currentTitle);
-    currentTitle.push({ userPK: loginUser.pk, titlePK: maxPk + 1, headTitle: headTitle });
+    currentTitle.push({ userPK: loginUser['pk'], titlePK: titlePK, headTitle: headTitle });
   } else {
-    currentTitle = [{ userPK: loginUser.pk, titlePK: maxPk + 1, headTitle: headTitle }];
+    currentTitle = [{ userPK: loginUser['pk'], titlePK: titlePK , headTitle: headTitle }];
   }
 
   localStorage.setItem('title', JSON.stringify(currentTitle));
-  res.sendStatus(200);
+  res.sendStatus(200); 
 });
 
 router.get('/getTitlePk', function (req, res) {
@@ -53,7 +57,7 @@ router.get('/getTitlePk', function (req, res) {
     let titleArray = JSON.parse(checkTitleJson);
     // 여기에서 필요한 처리를 수행하여 title pk 값을 추출합니다
     // 예시로 첫 번째 title의 titlePK 값을 가져오도록 구현합니다
-    let receivePk = null;
+    let receivePk = null; 
 
     titleArray.forEach((title) => {
       if (title.titlePK == sendTitlePk) {
@@ -72,11 +76,11 @@ router.get('/getTitlePk', function (req, res) {
 
 router.post('/edit', function (req, res) {
   const { titlePk, newGoalElement, className } = req.body;
-  console.log(titlePk, newGoalElement, className);
   let checkTitleJson = localStorage.getItem("title");
+  console.log(checkTitleJson);
+
   if (checkTitleJson) {
     titleArray = JSON.parse(checkTitleJson);
-
     titleArray.forEach((title) => {
       if (title.titlePK == titlePk) {
         title.headTitle = newGoalElement;
@@ -112,7 +116,9 @@ router.get('/convertPage', function (req, res) {
     res.json({ url:url });
   }
 });
-;
+
+
+
 
 
 module.exports = router;

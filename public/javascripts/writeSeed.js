@@ -13,16 +13,23 @@ $(document).ready(function () {
         $('#uploadImg').click();
     });
 
+    $('#uploadImg').change(function () {
+        changeValue(this);
+    });
+
     function changeValue(obj) {
+        console.log("%#####################" + obj);
         var fReader = new FileReader();
         fReader.readAsDataURL(obj.files[0]);
         fReader.onloadend = function (event) {
+            console.log(event.target.result);
             let tmp = $('.writeSeed_body_imgPlus');
             let str = '<img src="' + event.target.result + '" alt="">';
             $('.writeSeed_body_img').remove($('.writeSeed_body_imgPlus'));
             $('.writeSeed_body_img').append(str);
             $('.writeSeed_body_img').append(tmp);
         }
+        changeValue(0);
     }
 
     // 게시하기
@@ -41,11 +48,11 @@ $(document).ready(function () {
             let feedMemo = $('#seedMemo').val();
             let fileInput = $('#uploadImg');
             let file = null;
-    
+
             if (fileInput[0].files && fileInput[0].files.length > 0) {
                 file = fileInput[0].files[0];
             }
-    
+
             let str =
                 '<div class="col-6 col-md-4 col-lg-3">' +
                 '<div class="card">' +
@@ -64,7 +71,8 @@ $(document).ready(function () {
             $grid2.masonry('layout');
             $('#seedGoal').val('');
             $('#seedMemo').val('');
-    
+            $('.writeSeed_body_img').children('img').remove();
+
             // 피드 보기
             $('.card').click(function () {
                 $('.seedViewBg').css('display', 'block');
@@ -83,18 +91,18 @@ $(document).ready(function () {
                 $('seedViewGoal').children('h2').text($(tmpPos).children('h3').text());
                 $('seedViewMemo').children('p').text($(tmpPos).children('p').last().text());
             });
-            $('.writeSeedClose').click();
-    
+            
+
             let formData = new FormData();
             formData.append('feedGoal', feedGoal);
             formData.append('feedMemo', feedMemo);
-    
+
             if (file) {
                 formData.append('feedImage', file);
             } else {
                 formData.append('feedImage', null);
             }
-    
+            // console.log("=================="+feedGoal,feedMemo,file);
             // POST 요청 보내기
             $.post({
                 url: '/user/goal/writeFeed',
@@ -110,10 +118,28 @@ $(document).ready(function () {
                     console.log(error);
                 }
             });
+            $('.writeSeedClose').click();
         }
     });
-    
-    
+
+    const bodyBucket = document.querySelector('body');
+    const writeSeed = document.querySelector('.writeSeed');
+    const writeSeedClose = document.querySelector('.writeSeedClose');
+    const btnWrite = document.querySelector('.btnWrite');
+
+    btnWrite.addEventListener('click', () => {
+        writeSeed.style.display = 'inline-block';// 화면 고정
+        bodyBucket.style.overflow = 'hidden';
+    });
+
+    writeSeedClose.addEventListener('click', (event) => {
+        if (event.target === writeSeedClose) { // 외부 클릭 시 창닫음
+            writeSeed.style.display = '';
+            if (writeSeed.style.display != 'inline-block') {  // 화면 고정 해제
+                bodyBucket.style.overflow = 'auto';
+            }
+        }
+    });
 
     $grid2.masonry('reloadItems');
     $grid2.masonry('layout');

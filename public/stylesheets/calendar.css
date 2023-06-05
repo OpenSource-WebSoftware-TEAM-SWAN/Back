@@ -3,7 +3,6 @@ body,html{
     width: 100%;
     margin: 0px;
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 .event-color-c {

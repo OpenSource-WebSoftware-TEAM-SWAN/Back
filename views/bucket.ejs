@@ -25,28 +25,28 @@
       <div class="writeSeed_body">
         <!--모달창 내부-->
         <i class="fas fa-thin fa-xmark writeSeedClose"></i>
-        <form action="/user/goal/writeFeed" method="post" enctype="multipart/form-data">
+        <form action="">
           <p style="font-size: 1.5em;">Create Feed</p>
           <hr>
           <div>
             <label for="seedGoal">New goal</label>
-            <input id="seedGoal" type="text" placeholder="Write your goal name" name="goalName" required>
+            <input id="seedGoal" type="text" placeholder="Write your goal name" required>
           </div>
           <div>
             <label for="seedMemo">Memo</label>
-            <input id="seedMemo" type="text" placeholder="Write your memo" name="goalMemo">
+            <input id="seedMemo" type="text" placeholder="Write your memo">
           </div>
           <hr>
           <div class="writeSeed_body_img">
             <!--사진 추가부분-->
-            <input type="file" id="uploadImg" name="goalImg" accept=".gif, .jpg, .png" onchange="changeValue(this)"
+            <input type="file" id="uploadImg" accept=".gif, .jpg, .png" onchange="changeValue(this)"
               style="display: none;" />
-            <img id="seedImg" src="/images/이지형.png" alt="">
-            <button class="writeSeed_body_imgPlus" type="button"><img src="/images/writeSeed_Plus.png" alt=""></button>
+            <button class="writeSeed_body_imgPlus"><i class="fa-solid fa-plus fa-2x"></i></button>
+
           </div>
           <div class="writeSeed_body_btn">
             <!--추가기능-->
-            <input type="submit" class="writeSeed_submit" value="Post it">
+            <input type="submit" class="writeSeed_submit" value="Post it" />
             <!--추가기능 끝-->
           </div>
         </form>
@@ -60,7 +60,7 @@
     <div class="seedView">
       <!-- <iframe class="seedViewIframe" src="seedShow.html" frameborder="0" scrolling="no"></iframe> -->
       <%- include('seedShow') %>
-        <i class="fas fa-thin fa-xmark seedViewClose"></i>
+      <i class="fas fa-thin fa-xmark seedViewClose"></i>
     </div>
   </div>
 
@@ -80,9 +80,7 @@
             <img src="/images/profile.jpg" alt="user image" style="width: 100%;">
           </div>
           <div class="user-infoStat">
-            <p id="userName">
-              <%= loginUser.name %>
-            </p>
+            <p id="userName">빈원</p>
             <p id="userIntro">오늘도 힘차고 굳센 하루!</p>
           </div>
         </div>
@@ -152,6 +150,7 @@
             <!-- <a href="#" class="btn-card">수정</a>
             <a href="#" class="btn-card">삭제</a>
             <img src="./images/bookmark.png" width="30px" height="30px"> -->
+            
           </div><!--row closing tag-->
         </div><!--container-fluid closing tag-->
       </div><!--tab paned closing tag-->

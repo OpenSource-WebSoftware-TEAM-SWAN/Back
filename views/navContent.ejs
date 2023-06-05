@@ -1,6 +1,6 @@
-<ul class='elementGoal'>
+<!-- <ul class='elementGoal'>
     <img class='imgGoal' src='./images/button_hirDown.png'>
-    <li><a class='aGoal' id="<%= userItem.titlePK %>">
+    <li><a class='aGoal' id=<%= userItem.titlePK %>">
         <%= userItem.headTitle %>
         </a></li>
     <li class='exception'>
@@ -10,7 +10,6 @@
         </div>
     </li>
     <ul class='elementSub' style='clear:both;'>
-        <img class='imgSub' src='./images/button_hirDown.png'>
         <li><a class='aSub'>
                 소제목
             </a></li>
@@ -32,4 +31,11 @@
             </li>
         </ul>
     </ul>
+</ul> -->
+<ul class='elementGoal' >
+    <li><a class='aGoal' id="<%= userItem.titlePK %>"><%= userItem.headTitle %></a></li>
+    <li class='exception'><div style='float:right;'>
+        <button class='editGoal'>수정</button>&nbsp;
+        <button>삭제</button>
+    </div></li>
 </ul>

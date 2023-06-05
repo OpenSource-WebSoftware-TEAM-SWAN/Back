@@ -8,7 +8,7 @@ var bodyParser=require('body-parser');
 var loginRouter = require('./routes/login');
 const swanRouter = require('./routes/swan');
 const goalRouter = require('./routes/userGoal');
-
+const calendarRouter=require('./routes/calendar')
 
 var app = express();
 
@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', loginRouter);
 app.use('/swan', swanRouter);
 app.use('/user/goal',goalRouter);
+app.use('/calendar',calendarRouter);
 // app.use('/register',registerRouter);
 
 

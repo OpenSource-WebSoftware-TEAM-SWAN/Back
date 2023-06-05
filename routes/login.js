@@ -13,36 +13,6 @@ const crypto = require('crypto');
 const localStorage = new LocalStorage('./scratch/userJSON');
 const contnetLocalStorage = new LocalStorage('./scratch/contentJSON');
 
-// 파일 구조 //
-var headings = {
-  'Title1': {
-    'subTitle2': {
-      'feed':
-      {
-        'title': 'test title',
-        'content': 'test content',
-        'image': 'test image'
-      }
-    }
-  }
-}
-
-
-// 문자열 랜덤 생성 함수
-// function generateRandomString(length) {
-//   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//   const charactersLength = characters.length;
-//   let result = '';
-
-//   const randomBytes = crypto.randomBytes(length);
-//   for (let i = 0; i < length; i++) {
-//     const index = randomBytes[i] % charactersLength;
-//     result += characters.charAt(index);
-//   }
-
-//   return result;
-// }
-
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('login');
@@ -99,8 +69,8 @@ router.post('/swan', function (req, res) {
       loginUser = user;
       return;
     }
+    
   });
-
   
   if (loginUser) {
     // 로그인 성공
@@ -120,11 +90,8 @@ router.post('/swan', function (req, res) {
         }
       });
     }
-    console.log("fucking hell : "+ userContent);
     
-    // module.exports = { loginUser, userContent };
-    module.exports.loginUser=loginUser;
-    module.exports.userContent=userContent;
+    module.exports = { loginUser, userContent };
 
     res.render('swan', { userName: loginUser.name, userContent: userContent });
   } else {
@@ -134,4 +101,3 @@ router.post('/swan', function (req, res) {
 });
 
 module.exports = router;
-// exports.router=router;

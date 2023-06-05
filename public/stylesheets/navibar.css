@@ -217,10 +217,6 @@ li{
     background-color: rgba(0,0,0,0.1)
 }
 
-.divRecentContent{
-    
-}
-
 .divRecentContent a{
     color: black;
     text-decoration: none;
@@ -270,8 +266,7 @@ li{
 }
 
 .headline-info{
-    margin-top: 5%;
-
+    padding: 10px;
 }
 
 
@@ -299,22 +294,8 @@ li{
     background-color: rgba(0,0,0,0.1);
 }
 
-.elementGoal > div{
-    display: none;
-}
-
-.elementSub{
-    position: relative;
-    display: none;
-    padding-left: 5%;
-}
-
-.elementFeed{
-    position: relative;
-    display: none;
-}
-
 .elementGoal{
+    width: 100%;
     text-decoration: none;
     padding: 0;
 }
@@ -331,15 +312,10 @@ li{
     display: inline;
 }
 
-
 .elementGoal button{
     font-size: x-small;
     background-color: rgba(0,0,0,0.1);
     border: 0;
-}
-
-.elementGoal:hover > .elementSub{
-    display: none;
 }
 
 .headline-info *{
@@ -349,11 +325,4 @@ li{
 .headline-info *:hover{
     color: rgba(0,0,0,0.5);
 }
-
-.imgGoal, .imgSub{
-    margin: 0 5% 0 2%;
-    object-fit: cover;
-    width: 6%;
-}
-
 /****************************************************/

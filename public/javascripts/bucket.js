@@ -47,27 +47,28 @@ $('.linkPlus').click(function(){
           '<div class="row" data-masonry='+tmpMasonry+'>'+
           '</div></div></div>'
           let tmpdiv = $('#nav-tabContent').append(tmpStr);
+          tmpdiv.focus();
           nav_cnt++;
         return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#'+tmpNav+'" type="button" '+
           'role="tab" aria-controls="'+tmpNav+'" aria-selected="false">'+newGoalElement+'</button>');
         });
     }
-    }).on('blur', function(){
-        let newGoalElement = $(this).val();
-        $(this).replaceWith(function() {
-          $(this).focus();
-          $('#nav-tabContent').append(tmpStr);
-          let tmpMasonry='{"percentPosition": true}';
-          let tmpStr=
-          '<div class="tab-pane fade " id="'+tmpNav+'" role="tabpanel" aria-labelledby="'+tmpNav+'-tab">'+
-          '<div class="container-fluid">'+
-          '<div class="row" data-masonry='+tmpMasonry+'>'+
-          '</div></div></div>'
-          let tmpdiv = $('#nav-tabContent').append(tmpStr);
-          nav_cnt++;
-          return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#'+tmpNav+'" type="button" '+
-          'role="tab" aria-controls="'+tmpNav+'" aria-selected="false">'+newGoalElement+'</button>');
-        });
+  }).on('blur', function(){
+    let newGoalElement = $(this).val();
+      $(this).replaceWith(function() {
+        $(this).focus();
+        let tmpMasonry='{"percentPosition": true}';
+        let tmpStr=
+        '<div class="tab-pane fade " id="'+tmpNav+'" role="tabpanel" aria-labelledby="'+tmpNav+'-tab">'+
+        '<div class="container-fluid">'+
+        '<div class="row" data-masonry='+tmpMasonry+'>'+
+        '</div></div></div>'
+        let tmpdiv = $('#nav-tabContent').append(tmpStr);
+        tmpdiv.focus();
+        nav_cnt++;
+      return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#'+tmpNav+'" type="button" '+
+        'role="tab" aria-controls="'+tmpNav+'" aria-selected="false">'+newGoalElement+'</button>');
+      });
     });
   });
   $('.custom-button').last().next().focus();
