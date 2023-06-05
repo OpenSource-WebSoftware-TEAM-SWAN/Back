@@ -5,6 +5,7 @@ const { LocalStorage } = require('node-localstorage');
 const formidable = require('formidable')
 const fs = require('fs');
 const localStorage = new LocalStorage('./scratch/contentJSON');
+const subLocalStorage = new LocalStorage('./scratch/contentJSON');
 const loginUser = require('./login.js');
 const titleArray = require('./swan.js');
 const userContent = require('./login.js');
@@ -71,6 +72,33 @@ router.post('/writeFeed',upload.single('feedImage'), (req, res) => {
 
     res.sendStatus(200); // 성공적인 응답을 보낼 경우
   });
+});
+
+router.post('/post/subTitle',function(req,res){
+  
+  const obj=JSON.parse(JSON.stringify(req.body));
+  console.log(obj);
+  let subTitlePK=obj.subTitlePK;
+  let subTitle=obj.subTitle;
+
+
+  const TitlePK = req.query.pk; // 쿼리 파라미터 pk 값
+  console.log(subTitlePK,subTitle,TitlePK);
+  const subTitleData={
+    subTitlePK:subTitlePK,
+    TitlePK:TitlePK,
+    subTitle:subTitle
+  }
+  let currentSubTitle = subLocalStorage.getItem("subTitle");
+  if (currentSubTitle) {
+    currentSubTitle = JSON.parse(currentSubTitle);
+    currentSubTitle.push(subTitleData)
+  }
+  else {
+    currentSubTitle = [subTitleData];
+  }
+  subLocalStorage.setItem('subTitle', JSON.stringify(currentSubTitle));
+  res.sendStatus('200');
 });
 
 module.exports = router;

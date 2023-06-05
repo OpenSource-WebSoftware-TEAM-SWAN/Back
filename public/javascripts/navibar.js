@@ -36,7 +36,7 @@ $(document).ready(function () {
 
     // 목표 추가
     $('.add-title').click(function(){
-        pkDate=Date.now();
+        let pkDate=Date.now();
         pkDate=String(pkDate);
         let str;
         if(titleCnt>0){
@@ -72,7 +72,7 @@ $(document).ready(function () {
         // 해당 요소의 데이터를 가져올 수 있는 방법에 따라 다른 페이지로 리다이렉션하거나 데이터를 전달할 수 있습니다.
         var headTitle = $(this).text().trim(); // 클릭한 요소의 텍스트 가져오기
         var titlepk=$(this).attr('id');
-        console.log("ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ"+titlepk);
+        
         // window.location.href = '/user/goal/' + encodeURIComponent(headTitle); // 다른 페이지로 리다이렉션
         $.get('/swan/convertPage',{headTitle:headTitle,titlepk:titlepk},function(data){
             window.location.href=data.url

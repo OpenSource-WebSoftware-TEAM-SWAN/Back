@@ -1,4 +1,7 @@
-var nav_cnt=0;
+
+
+var nav_cnt = 0;
+
 $(document).ready(function () {
   // Masonry 초기화
   var $grid = $(".row").masonry({
@@ -21,56 +24,79 @@ $(document).ready(function () {
 });
 
 // 탭 추가 버튼
-$('.linkPlus').click(function(){
-  let tmpNav='nav-'+nav_cnt;
+$('.linkPlus').click(function (){
+  let tmpNav = 'nav-' + nav_cnt;
   let str;
-  str=
-  '<button class="nav-link custom-button" '+
-  'data-bs-toggle="tab" data-bs-target="#'+tmpNav+'" type="button" '+
-  'role="tab" aria-controls="'+tmpNav+'" aria-selected="false">New Subgoal</button>';
-  let tmp=$(this);
+  let subTitlePkDate = Date.now();
+  subTitlePkDate = String(subTitlePkDate);
+  const urlParams = new URLSearchParams(window.location.search);
+  const pk = urlParams.get('pk');
+  str =
+    '<button class="nav-link custom-button" ' +
+    'data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
+    'role="tab" aria-controls="' + tmpNav + '" aria-selected="false">New Subgoal</button>';
+  let tmp = $(this);
   $('#nav-tab').remove('linkPlus');
   $('#nav-tab').append(str);
   $('#nav-tab').append(tmp);
-  tmp.prev().replaceWith(function(){
-    let changeGoalElement=$(this).text();
-    return $("<input value='"+changeGoalElement+"'"+" style='width: 10em; border: 0;'>", {
-    }).on('keypress', function(e) {
-    if (e.keyCode === 13) {
+  tmp.prev().replaceWith(function () {
+    let changeGoalElement = $(this).text();
+    return $("<input value='" + changeGoalElement + "'" + " style='width: 10em; border: 0;'>", {
+    }).on('keypress', function (e) {
+      if (e.keyCode === 13) {
         let newGoalElement = $(this).val();
-        $(this).replaceWith(function() {
+        $(this).replaceWith(function () {
           $(this).focus();
-          let tmpMasonry='{"percentPosition": true}';
-          let tmpStr=
-          '<div class="tab-pane fade " id="'+tmpNav+'" role="tabpanel" aria-labelledby="'+tmpNav+'-tab">'+
-          '<div class="container-fluid">'+
-          '<div class="row" data-masonry='+tmpMasonry+'>'+
-          '</div></div></div>'
+          let tmpMasonry = '{"percentPosition": true}';
+          // 소제목 추가
+          let tmpStr =
+            '<div class="tab-pane fade " id="' + tmpNav + '" role="tabpanel" aria-labelledby="' + tmpNav + '-tab">' +
+            '<div class="container-fluid">' +
+            '<div class="row" data-masonry=' + tmpMasonry + '>' +
+            '</div></div></div>'
           let tmpdiv = $('#nav-tabContent').append(tmpStr);
           tmpdiv.focus();
           nav_cnt++;
-        return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#'+tmpNav+'" type="button" '+
-          'role="tab" aria-controls="'+tmpNav+'" aria-selected="false">'+newGoalElement+'</button>');
+
+          // 서버와 통신  parameter : 소제목 소제목 pk값
+          $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function(response) {
+            console.log(response); // 서버 응답 확인
+          });
+          
+
+          return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
+            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false">' + newGoalElement + '</button>');
         });
-    }
-  }).on('blur', function(){
-    let newGoalElement = $(this).val();
-      $(this).replaceWith(function() {
+        
+      }
+    }).on('blur', function () {
+      let newGoalElement = $(this).val();
+      $(this).replaceWith(function () {
         $(this).focus();
-        let tmpMasonry='{"percentPosition": true}';
-        let tmpStr=
-        '<div class="tab-pane fade " id="'+tmpNav+'" role="tabpanel" aria-labelledby="'+tmpNav+'-tab">'+
-        '<div class="container-fluid">'+
-        '<div class="row" data-masonry='+tmpMasonry+'>'+
-        '</div></div></div>'
+        let tmpMasonry = '{"percentPosition": true}';
+        let tmpStr =
+          '<div class="tab-pane fade " id="' + tmpNav + '" role="tabpanel" aria-labelledby="' + tmpNav + '-tab">' +
+          '<div class="container-fluid">' +
+          '<div class="row" data-masonry=' + tmpMasonry + '>' +
+          '</div></div></div>'
         let tmpdiv = $('#nav-tabContent').append(tmpStr);
         tmpdiv.focus();
         nav_cnt++;
-      return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#'+tmpNav+'" type="button" '+
-        'role="tab" aria-controls="'+tmpNav+'" aria-selected="false">'+newGoalElement+'</button>');
+
+        // 서버와 통신  parameter : 소제목 소제목 pk값
+        console.log(subTitlePkDate,newGoalElement);
+        $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function(response) {
+          console.log(response); // 서버 응답 확인
+        });
+        
+
+        return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
+          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false">' + newGoalElement + '</button>');
+          
       });
     });
   });
   $('.custom-button').last().next().focus();
-  $('.custom-button').last().next().select();
+  $('.custom-button').last().next().trigger('click');
+
 });
