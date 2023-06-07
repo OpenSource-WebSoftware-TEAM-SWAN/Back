@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { stringify } = require('querystring');
 const { LocalStorage } = require('node-localstorage');
-const formidable = require('formidable')
+const formidable = require('formidable');
 const fs = require('fs');
 const localStorage = new LocalStorage('./scratch/contentJSON');
 const subLocalStorage = new LocalStorage('./scratch/contentJSON');
@@ -16,7 +16,7 @@ const multer = require('multer');
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
-      cb(null, 'uploads/'); // 파일 저장 경로
+      cb(null, 'public/uploads/'); // 파일 저장 경로
     },
     filename(req, file, cb) {
       const ext = path.extname(file.originalname);  // 확장자
@@ -47,16 +47,15 @@ router.get('/', function (req, res, next) {
   // console.log(subTitleArray);
 
   // 첫 번째 subTitle을 가져옴
-  activeSubTitlePK = subTitleArray.find(sub => sub.TitlePK === pk);
+  activeSubTitlePK = subTitleArray.find(sub => sub.TitlePK === pk).subTitlePK;
 
-  console.log(activeSubTitlePK);
+  console.log("++++++++++++++++++++++"+activeSubTitlePK);
   // console.log(""+pk)
-  console.log(feedArray);
+  console.log("/////////////////////"+feedArray);
   // 첫 번째 subTitle의 feedArray를 가져옴
-  const filteredFeedArray = feedArray.filter(feed => feed.subTitlePK === activeSubTitlePK.subTitlePK);
-
-  // res.render('bucket', { headTitle: headTitle, pk: pk, userContent: userContent, loginUser: loginUser });
-  console.log(filteredFeedArray);
+  const filteredFeedArray = feedArray.filter(feed => feed.subTitlePK === activeSubTitlePK);
+  
+  console.log("#############"+filteredFeedArray);
   res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray });
 });
 
@@ -78,56 +77,44 @@ router.get('/custom/goal',(req,res,next)=>{
 });
 
 // feed 작성 POST 요청을 처리하는 핸들러 함수
-router.post('/writeFeed', upload.single('feedImage'), (req, res) => {
-  const form = new formidable.IncomingForm();
-  // 파일 업로드 설정
-  form.uploadDir = path.join(__dirname, '../uploads'); // 파일이 저장될 디렉토리 설정
-  form.keepExtensions = true; // 파일 확장자 유지
-
-  // Check if an image file is included
+router.post('/write/feed', upload.single('feedImage'), (req, res) => {
   if (req.file) {
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        console.log(err);
-        res.sendStatus(500); // 오류 응답
-        return;
-      }
+    const feedGoal = req.body.feedGoal;
+    const feedMemo = req.body.feedMemo;
+    const feedImgPath = "/uploads/"+req.file.filename; // 이미지 파일 경로
 
-      // 파일 업로드 완료 후의 로직 수행
-      const feedGoal = fields.feedGoal;
-      const feedMemo = fields.feedMemo;
-      const feedImg = files.feedImage; // 업로드된 파일 정보
+    console.log(feedGoal, feedMemo, feedImgPath);
+    
+    let currentFeed = localStorage.getItem('feed');
+    if (currentFeed) {
+      currentFeed = JSON.parse(currentFeed);
+      currentFeed.push({ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath });
+    } else {
+      currentFeed = [{ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath }];
+    }
+    localStorage.setItem('feed', JSON.stringify(currentFeed));
 
-      console.log(feedGoal, feedMemo, feedImg);
-      let currentFeed = localStorage.getItem('feed');
-      if (currentFeed) {
-        currentFeed = JSON.parse(currentFeed);
-        currentFeed.push({ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImg: [feedImg] });
-      } else {
-        currentFeed = [{ subTitlePK: activeSubTitlePK, feedImg: feedGoal, feedMemo: feedMemo, feedImg: [feedImg] }];
-      }
-      localStorage.setItem('feed', JSON.stringify(currentFeed));
-
-      res.sendStatus(200); // 성공적인 응답을 보낼 경우
-    });
+    res.sendStatus(200); // 성공적인 응답을 보낼 경우
   } else {
     // No image file included, handle the case accordingly
     const feedGoal = req.body.feedGoal;
     const feedMemo = req.body.feedMemo;
 
     console.log(feedGoal, feedMemo);
+    
     let currentFeed = localStorage.getItem('feed');
     if (currentFeed) {
       currentFeed = JSON.parse(currentFeed);
-      currentFeed.push({ subTitlePK: 1, feedGoal: feedGoal, feedMemo: feedMemo, feedImg: [] });
+      currentFeed.push({ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: '' });
     } else {
-      currentFeed = [{ subTitlePK: 1, feedGoal: feedGoal, feedMemo: feedMemo, feedImg: [] }];
+      currentFeed = [{ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: '' }];
     }
     localStorage.setItem('feed', JSON.stringify(currentFeed));
 
     res.sendStatus(200); // 성공적인 응답을 보낼 경우
   }
 });
+
 
 
 // 소제목 추가 버튼 클릭 post이벤트
@@ -145,7 +132,7 @@ router.post('/post/subTitle',function(req,res){
     TitlePK:TitlePK,
     subTitle:subTitle
   }
-  let currentSubTitle = subLocalStorage.getItem("subTitle");
+  let currentSubTitle = localStorage.getItem("subTitle");
   if (currentSubTitle) {
     currentSubTitle = JSON.parse(currentSubTitle);
     currentSubTitle.push(subTitleData)
@@ -153,7 +140,7 @@ router.post('/post/subTitle',function(req,res){
   else {
     currentSubTitle = [subTitleData];
   }
-  subLocalStorage.setItem('subTitle', JSON.stringify(currentSubTitle));
+  localStorage.setItem('subTitle', JSON.stringify(currentSubTitle));
   res.sendStatus('200');
 });
 

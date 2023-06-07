@@ -52,11 +52,11 @@ $(document).ready(function () {
             if (fileInput[0].files && fileInput[0].files.length > 0) {
                 file = fileInput[0].files[0];
             }
-
+            let imageUrl=file?URL.createObjectURL(file):'/images/monarisa.jpg'
             let str =
                 '<div class="col-6 col-md-4 col-lg-3">' +
                 '<div class="card">' +
-                '<img src="./images/sameple_image.jpeg" class="card-img-top">' + // 내부 이미지의 첫 번째
+                '<img src="' + imageUrl + '" class="card-img-top">'  + // 내부 이미지의 첫 번째
                 '<div class="card-body">' +
                 '<div class="card-text">' +
                 '<h3>' + $('#seedGoal').val() + '</h3>' + // 피드 제목
@@ -105,7 +105,7 @@ $(document).ready(function () {
             console.log("=================="+feedGoal,feedMemo,file);
             // POST 요청 보내기
             $.post({
-                url: '/user/goal/writeFeed',
+                url: '/user/goal/write/feed',
                 data: formData,
                 processData: false,
                 contentType: false,
