@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('img').on("error", function () {
-        $(this).attr("src", "./images/이지형.png");
+        $(this).attr("src", "/images/이지형.png");
     });
 
     let $grid2 = $(".row").masonry({
@@ -18,7 +18,7 @@ $(document).ready(function () {
     });
 
     function changeValue(obj) {
-        console.log("%#####################" + obj);
+        
         var fReader = new FileReader();
         fReader.readAsDataURL(obj.files[0]);
         fReader.onloadend = function (event) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
                 $('seedViewMemo').children('p').text($(tmpPos).children('p').last().text());
             });
             
-
+            
             let formData = new FormData();
             formData.append('feedGoal', feedGoal);
             formData.append('feedMemo', feedMemo);
@@ -102,7 +102,7 @@ $(document).ready(function () {
             } else {
                 formData.append('feedImage', null);
             }
-            // console.log("=================="+feedGoal,feedMemo,file);
+            console.log("=================="+feedGoal,feedMemo,file);
             // POST 요청 보내기
             $.post({
                 url: '/user/goal/writeFeed',

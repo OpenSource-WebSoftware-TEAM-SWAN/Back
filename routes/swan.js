@@ -22,19 +22,6 @@ router.post('/sendTitle', function (req, res) {
   const {loginUser,userContent} = require('./login.js');
   const headTitle = req.body.headTitle;
   const titlePK=req.body.titlePk;
-  // let maxPk = 0;
-  // let cnttitleArray = [];
-
-  // let checkTitleJson = localStorage.getItem("title");
-  // if (checkTitleJson) {
-  //   cnttitleArray = JSON.parse(checkTitleJson);
-
-  //   cnttitleArray.forEach((title) => {
-  //     if (title.titlePK > maxPk) {
-  //       maxPk = title.titlePK;
-  //     }
-  //   });
-  // }
 
   let currentTitle = localStorage.getItem('title');
   console.log(headTitle,titlePK);

@@ -16,10 +16,18 @@ $(document).ready(function () {
     $currentTabContent.imagesLoaded(function () {
       // 이미지 로드 완료 후 Masonry 업데이트
       $grid.masonry("layout");
-
+      
       // 스크롤 초기화
       $currentTabContent.closest(".tab-content").scrollTop(0);
+      
+      
+
     });
+  }).on('click',function(){
+    // TODO : 탭 변경 시 url에 소제목 pk(button id value)값 추가
+    
+    const getSubTitlePk=$(this).attr('id');
+    $.get('/user/goal/custom/goal',{subTitlePK:getSubTitlePk}).done()
   });
 });
 
@@ -65,7 +73,7 @@ $('.linkPlus').click(function (){
           
 
           return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false">' + newGoalElement + '</button>');
+            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id='+subTitlePkDate+'>' + newGoalElement + ' </button>');
         });
         
       }
@@ -91,7 +99,7 @@ $('.linkPlus').click(function (){
         
 
         return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false">' + newGoalElement + '</button>');
+          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id='+subTitlePkDate+'>' + newGoalElement + '</button>');
           
       });
     });

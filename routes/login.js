@@ -15,9 +15,14 @@ const contnetLocalStorage = new LocalStorage('./scratch/contentJSON');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('login');
+  res.render('about');
 });
-
+router.get('/login',function(req,res,next){
+  res.render("login");
+});
+router.get('/signup',function(req,res,next){
+  res.render("signup");
+});
 /* POST reigster page */
 router.post('/register', function (req, res) {
   const email = req.body.signUpID;

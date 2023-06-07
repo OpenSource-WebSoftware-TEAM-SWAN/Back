@@ -44,7 +44,7 @@ $(document).ready(function () {
         "<li><a class='aGoal' id='temp'>새 목표("+titleCnt+")</a></li>"+
         "<li class='exception'><div style='float:right;'>"+
             "<button class='editGoal'>수정</button>"+"&nbsp;"+
-            "<button>삭제</button>"+
+            "<button class='delGoal'>삭제</button>"+
         "</div></li>"+
     "</ul>"
         }
@@ -53,7 +53,7 @@ $(document).ready(function () {
         "<li><a class='aGoal' id='temp'>새 목표</a></li>"+
         "<li class='exception'><div style='float:right;'>"+
             "<button class='editGoal'>수정</button>"+"&nbsp;"+
-            "<button>삭제</button>"+
+            "<button class='delGoal'>삭제</button>"+
         "</div></li>"+
     "</ul>"
         }

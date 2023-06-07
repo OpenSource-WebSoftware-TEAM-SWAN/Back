@@ -297,7 +297,8 @@ li{
 .elementGoal{
     width: 100%;
     text-decoration: none;
-    padding: 0;
+    padding: 4px;
+    margin: 0;
 }
 
 .elementGoal, li{
@@ -308,14 +309,21 @@ li{
     padding-right: 0;
 }
 
-.exception{
-    display: inline;
-}
-
 .elementGoal button{
     font-size: x-small;
-    background-color: rgba(0,0,0,0.1);
     border: 0;
+}
+
+.elementGoal:hover{
+    background-color: rgba(0,0,0,0.1);
+}
+
+.editGoal, .delGoal{
+    display: none;
+}
+
+.exception{
+    display: inline;
 }
 
 .headline-info *{

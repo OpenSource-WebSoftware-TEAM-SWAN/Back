@@ -28,7 +28,7 @@
         <div class="login-wrapper">
             <h3><a href="prototype.html">With your a little step</a></h3>
             <img src="/images/white-icon-swan.png" alt="" width="40px" height="40px">
-            <form id="login-form" action="/swan" method="post">
+            <!-- <form id="login-form" action="/swan" method="post">
                 <input type="text" name="userID" placeholder="Email" id="LOGIN_ID" autofocus>
                 <input type="password" name="userPW" placeholder="Password" id="LOGIN_PW">
                 <label for="remember-check">
@@ -36,11 +36,20 @@
                 </label>
                 <input type="submit" value="Login" id="LOGIN_BTN" disabled>
                 <p class="register" id="registerBtn"><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></p>
+            </form> -->
+            <form id="login-form" action="/swan" method="post">
+                <input type="text" name="userID" placeholder="Email" id="LOGIN_ID" autofocus>
+                <input type="password" name="userPW" placeholder="Password" id="LOGIN_PW">
+                <label for="remember-check">
+                    <input type="checkbox" id="remember-check"> Remember ID
+                </label>
+                <p class="register" id="registerBtn"><a href="signup" data-toggle="modal" data-target="#registerModal">Sign up</a></p>
+                <input type="submit" value="Login" id="LOGIN_BTN" disabled>
             </form>
         </div>
 
         <!-- Modal -->
-        <div class="modal register-modal" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+        <!-- <div class="modal register-modal" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -58,7 +67,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <script>
         const signupId=$('#SIGNUP_ID');
@@ -97,9 +106,9 @@
             loginBtn.style.opacity = "1.0";
         }
 
-        function moveToMain() {
-            location.replace("www.google.com");
-        }
+        //function moveToMain() {
+        //    location.replace("www.google.com");
+        //}
 
         loginId.addEventListener('keyup', color);
         loginPw.addEventListener('keyup', color);
@@ -107,7 +116,7 @@
         loginBtn.addEventListener('mouseover', hovering);
         loginBtn.addEventListener('mouseout', unhovering);
         $('#registerBtn').click(function(e){
-			e.preventDefault();
+			//e.preventDefault();
 			$('#registerModal').modal("show");
 		});
 
