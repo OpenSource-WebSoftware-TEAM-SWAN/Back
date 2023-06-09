@@ -1,4 +1,57 @@
+// 소제목 탭 수정 삭제 기능
+function onTab() {
+  let tmpHeight = $('.editSub').outerHeight();
+  $('.editSub').css('display', 'inline-block');
+  $('.delSub').css('display', 'inline-block');
+  let pos = $(".nav-link:focus").offset();
+  pos = ({ left: pos.left, top: pos.top - tmpHeight });
 
+  let currentTab = $(".nav-link:focus");
+  const activeTab=$('.custom-button.active').attr('id');
+  $('.editSub').offset(pos);
+  $('.editSub').on('click', function () {
+    console.log("fuck you");
+    let currentVal = $(currentTab).text();
+    // $('.editSub').css('display', 'none');
+    // $('.delSub').css('display', 'none');
+    currentTab.css('display', 'none');
+
+    let str =
+      "<input value='" + currentVal + "'" + " style='width: 10em; border: 0;'>";
+    currentTab.after(str);
+    currentTab.next().focus();
+    currentTab.next().select();
+
+    //탭 수정 버튼
+    currentTab.next().on('keypress', function (e) {
+      if (e.keyCode === 13) {
+        currentTab.html(currentTab.next().val());
+        currentTab.css('display', 'inline-block');
+        currentTab.next().remove();
+        $.post('user/goal/sub/edit',{subPK:activeTab,editVal:currentVal})
+      }
+    }).on('blur', function () {
+      currentTab.html(currentTab.next().val());
+      currentTab.css('display', 'inline-block');
+      currentTab.next().remove();
+    });
+  });
+
+  //탭 삭제 버튼
+  let tmpWidth = $('.editSub').outerWidth();
+  pos = ({ left: pos.left + tmpWidth, top: pos.top })
+  $('.delSub').offset(pos).on('click', function () {
+    currentTab.remove();
+    $('.editSub').css('display', 'none');
+    $('.delSub').css('display', 'none');
+  });
+
+  // // blur
+  // currentTab.on('blur', function () {
+  //   $('.editSub').css('display', 'none');
+  //   $('.delSub').css('display', 'none');
+  // });
+}
 
 $(document).ready(function () {
   // Masonry 초기화
@@ -14,29 +67,36 @@ $(document).ready(function () {
     $currentTabContent.imagesLoaded(function () {
       // 이미지 로드 완료 후 Masonry 업데이트
       $grid.masonry("layout");
-      
+
       // 스크롤 초기화
       $currentTabContent.closest(".tab-content").scrollTop(0);
+
     });
   });
+
   /* 소제목 버튼 클릭시 url에 추가  */
-  $('.nav-link.custom-button').on('click',function(){
-    
+  $('.nav-link.custom-button').on('click', function () {
+
     // 현재 선택된 탭의 id 값을 가져옴
     var subPK = $(".nav-link.custom-button.active").attr("id");
-    let subTabTarget=$(this).attr('data-index');
+    let subTabTarget = $(this).attr('data-index');
+    let headTitle=$('#pageHeader').children().text();
     // URL에 파라미터 추가
     var url = new URL(window.location.href);
     url.searchParams.set("subTitlePK", subPK);
     history.pushState(null, "", url.toString());
-    $.get('/user/goal/custom/goal', { subTitlePK: subPK,tabTarget:subTabTarget});
-      
+    $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length},function(data){
+      $('#'+subTabTarget).html(data);
+    });
+
   });
 });
+// 소제목 탭 함수 끝
+
 
 // 소제목 추가
 $('.linkPlus').click(function () {
-  let nav_cnt=$(this).prev().attr('data-index')+1;
+  let nav_cnt = $(this).prev().attr('data-index')?Number($(this).prev().attr('data-index'))+1:1;
   let tmpNav = nav_cnt;
   let str;
   let subTitlePkDate = Date.now();
@@ -47,7 +107,7 @@ $('.linkPlus').click(function () {
   str =
     '<button class="nav-link custom-button" ' +
     'data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-    'role="tab" aria-controls="' + tmpNav + '" aria-selected="false">New Subgoal</button>';
+    'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" data-index="' + tmpNav + '">New Subgoal</button>';
   let tmp = $(this);
   $('#nav-tab').remove('linkPlus');
   $('#nav-tab').append(str);
@@ -77,8 +137,8 @@ $('.linkPlus').click(function () {
           });
 
 
-          return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + '>' + newGoalElement + ' </button>');
+          return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" data-index="' + tmpNav + '" type="button" ' +
+            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + ' onclick="onTab();" >' + newGoalElement + ' </button>');
         });
 
       }
@@ -103,13 +163,14 @@ $('.linkPlus').click(function () {
         });
 
 
-        return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + '>' + newGoalElement + '</button>');
+        return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '"  data-index="' + tmpNav + '" type="button" ' +
+          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + ' onclick="onTab();">' + newGoalElement + '</button>');
 
       });
     });
   });
   $('.custom-button').last().next().focus();
+  $('.custom-button').last().next().select();
   $('.custom-button').last().next().trigger('click');
 
 });

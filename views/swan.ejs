@@ -68,9 +68,9 @@
       <!-- headline toggle -->
       <button class="add-title">버킷리스트 추가</button>
       <div class="headline-info" id="headline">
-        <% userContent.forEach(function(item) { %>
+        <% userContent.reverse().forEach(function(item) { %>
           <%- include('navContent',{userItem:item}) %>
-        <% }) %>
+        <% }); %>
         </div class="btntoTop">
       <!-- END headline toggle -->
       <div class="btntoTop">

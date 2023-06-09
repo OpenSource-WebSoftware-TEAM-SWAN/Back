@@ -3,12 +3,14 @@ var router = express.Router();
 const { stringify } = require('querystring');
 const { LocalStorage } = require('node-localstorage');
 const formidable = require('formidable');
+const ejs = require('ejs');
 const fs = require('fs');
 const localStorage = new LocalStorage('./scratch/contentJSON');
 const subLocalStorage = new LocalStorage('./scratch/contentJSON');
 // let titleArray = require('./swan.js');
 var activeSubTitle;
 var activeSubTitlePK;
+let filteredFeedArray;
 
 
 const path = require('path');
@@ -32,9 +34,11 @@ const upload = multer({
 // bucket.ejs로 이동 시
 router.get('/', function (req, res, next) {
   const headTitle = req.query.headTitle; // 쿼리 파라미터 headTitle 값
+
   const pk = req.query.pk; // 쿼리 파라미터 pk 값
   const { loginUser, userContent } = require('./login.js');
-
+  console.log(loginUser.pk);
+  console.log(userContent);
   // headTitle과 pk를 사용하여 필요한 처리 수행
 
   // TODO 대제목에 맞는 소제목 필터
@@ -46,7 +50,6 @@ router.get('/', function (req, res, next) {
   const subTitleArray = JSON.parse(getCustomSubTitle);
   const feedArray = JSON.parse(getCustomFeed);
   // console.log(subTitleArray);
-  let filteredFeedArray;
 
   // subTitle들을 가져옴
   activeSubTitle = subTitleArray.filter(sub => sub.TitlePK === pk);
@@ -56,39 +59,58 @@ router.get('/', function (req, res, next) {
   let activeSubTitlePK = subTitleArray.find(sub => sub.TitlePK === pk);
   console.log(activeSubTitlePK);
   if (activeSubTitlePK) {
-    console.log("if case")
+
     // 첫 번째 subTitle의 feedArray를 가져옴
-    activeSubTitlePK=activeSubTitlePK.subTitlePK;
+    activeSubTitlePK = activeSubTitlePK.subTitlePK;
     filteredFeedArray = feedArray.filter(feed => feed.subTitlePK === activeSubTitlePK);
   }
-  else{
-    console.log("else case")
-    filteredFeedArray=[];
+  else {
+
+    filteredFeedArray = [];
   }
 
   /** end */
 
   // console.log("#############"+filteredFeedArray);
-  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray,subTitles:activeSubTitle,tabTarget:"1" });
+  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray, subTitles: activeSubTitle, tabTarget: "1" });
   // res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser,subTitles:activeSubTitle});
 });
 
 
 // feed rendering
 router.get('/custom/goal', (req, res, next) => {
-  console.log(req.body);
-  const subTitlePK = req.body.subTitlePK;
-  const tabTarget=req.body.tabTarget;
-  console.log(subTitlePK);
+  const headTitle = req.query.headTitle; // 쿼리 파라미터 headTitle 값
+  const subTitlePK = Number(req.query.subTitlePK);
+  const tabTarget = req.query.tabTarget;
+  const subTitleNumber = req.query.subTitleNum;
+  // console.log(subTitleNumber);
+  // console.log("##############"+headTitle);
   // const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
   // const userArray = JSON.parse(userJSONFile);
   const getCustomFeed = fs.readFileSync('./scratch/contentJSON/feed', 'utf-8');
   const feedArray = JSON.parse(getCustomFeed);
-  // console.log(feedArray);
-  const filteredFeedArray = feedArray.filter(feed => { feed.subTitlePK === subTitlePK });
-  console.log(filteredFeedArray);
-  res.json({ feedArray: filteredFeedArray,tabTarget:tabTarget});
+  filteredFeedArray = [];
+  feedArray.forEach(feed => {
+    if (feed.subTitlePK == subTitlePK) {
+      filteredFeedArray.push(feed);
+    }
+  });
+  // filteredFeedArray = feedArray.filter(feed => { console.log("**feed**"+feed.subTitlePK);return feed.subTitlePK == Number(subTitlePK) });
+  // console.log("ㄴㅇㅁㄴㅇㅁㄴ"+filteredFeedArray.length);
+  // filteredFeedArray=JSON.stringify(filteredFeedArray);
+  filteredFeedArray.forEach(feed => {
+    console.log("as" + feed.subTitlePK);
+  });
+  console.log("%^%^%^%^"+activeSubTitle);
+  ejs.renderFile('./views/goalCard.ejs', { subTitles: activeSubTitle, headTitle: headTitle, feedArray: filteredFeedArray, tabTarget: tabTarget, subTitleNum: subTitleNumber }, function (err, renderedHTML) {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+      return;
+    }
 
+    res.send(renderedHTML);
+  });
 });
 
 // feed 작성 POST 요청을 처리하는 핸들러 함수
@@ -96,16 +118,17 @@ router.post('/write/feed', upload.single('feedImage'), (req, res) => {
   if (req.file) {
     const feedGoal = req.body.feedGoal;
     const feedMemo = req.body.feedMemo;
+    const subTitlePK = req.body.subTitlePK;
     const feedImgPath = "/uploads/" + req.file.filename; // 이미지 파일 경로
 
-    console.log(feedGoal, feedMemo, feedImgPath);
+    // console.log(subTitlePK,feedGoal, feedMemo, feedImgPath);
 
     let currentFeed = localStorage.getItem('feed');
     if (currentFeed) {
       currentFeed = JSON.parse(currentFeed);
-      currentFeed.push({ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath });
+      currentFeed.push({ subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath });
     } else {
-      currentFeed = [{ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath }];
+      currentFeed = [{ subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath }];
     }
     localStorage.setItem('feed', JSON.stringify(currentFeed));
 
@@ -114,15 +137,16 @@ router.post('/write/feed', upload.single('feedImage'), (req, res) => {
     // No image file included, handle the case accordingly
     const feedGoal = req.body.feedGoal;
     const feedMemo = req.body.feedMemo;
+    const subTitlePK = req.body.subTitlePK;
 
     console.log(feedGoal, feedMemo);
 
     let currentFeed = localStorage.getItem('feed');
     if (currentFeed) {
       currentFeed = JSON.parse(currentFeed);
-      currentFeed.push({ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: '' });
+      currentFeed.push({ subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: '' });
     } else {
-      currentFeed = [{ subTitlePK: activeSubTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: '' }];
+      currentFeed = [{ subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: '' }];
     }
     localStorage.setItem('feed', JSON.stringify(currentFeed));
     res.sendStatus(200); // 성공적인 응답을 보낼 경우
@@ -140,7 +164,7 @@ router.post('/post/subTitle', function (req, res) {
   let subTitle = obj.subTitle;
   const TitlePK = req.query.pk; // 쿼리 파라미터 pk 값
 
-  console.log(subTitlePK, subTitle, TitlePK);
+  // console.log(subTitlePK, subTitle, TitlePK);
   const subTitleData = {
     subTitlePK: subTitlePK,
     TitlePK: TitlePK,
@@ -157,5 +181,15 @@ router.post('/post/subTitle', function (req, res) {
   localStorage.setItem('subTitle', JSON.stringify(currentSubTitle));
   res.sendStatus('200');
 });
+router.post('/sub/edit',function(req,res){
+  const obj = JSON.parse(JSON.stringify(req.body));
+  let editSubTitlePK=obj.subPK;
+  let editVal=obj.editVal;
+  const subTitleFile=fs.readFileSync('./scratch/contentJSON/subTitle');
+  const subTitles=JSON.parse(subTitleFile);
+  subTitles.find((sub)=>{
+    if(sub==editSubTitlePK)sub.subTitle=editVal;
+  })
+})
 
 module.exports = router;

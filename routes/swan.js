@@ -64,7 +64,6 @@ router.get('/getTitlePk', function (req, res) {
 router.post('/edit', function (req, res) {
   const { titlePk, newGoalElement, className } = req.body;
   let checkTitleJson = localStorage.getItem("title");
-  console.log(checkTitleJson);
 
   if (checkTitleJson) {
     titleArray = JSON.parse(checkTitleJson);
@@ -102,6 +101,21 @@ router.get('/convertPage', function (req, res) {
     var url = '/user/goal?headTitle=' + encodeURIComponent(headTitle) + '&pk=' + encodeURIComponent(titlePK);
     res.json({ url:url });
   }
+});
+router.post('/title/del', function(req, res) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  const delTitlePK = obj.TitleID;
+
+  let titleJson = localStorage.getItem("title");
+  titleJson = JSON.parse(titleJson);
+
+  const newTitleArray = titleJson.filter((title) => {
+    console.log(title.titlePK + "   filter 중");
+    return title.titlePK != delTitlePK;
+  });
+
+  console.log(newTitleArray);
+  localStorage.setItem("title", JSON.stringify(newTitleArray));
 });
 
 

@@ -97,6 +97,9 @@ $(document).ready(function () {
             
             
             let formData = new FormData();
+            let subTitlePK=$('.nav-link.custom-button.active').attr('id');
+            console.log(subTitlePK);
+            formData.append('subTitlePK',subTitlePK);
             formData.append('feedGoal', feedGoal);
             formData.append('feedMemo', feedMemo);
 
@@ -105,7 +108,7 @@ $(document).ready(function () {
             } else {
                 formData.append('feedImage', null);
             }
-            console.log("=================="+feedGoal,feedMemo,file);
+            console.log("=================="+subTitlePK,feedGoal,feedMemo,file);
             // POST 요청 보내기
             $.post({
                 url: '/user/goal/write/feed',

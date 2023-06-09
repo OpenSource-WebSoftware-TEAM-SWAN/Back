@@ -187,6 +187,8 @@ $(document).on('click', '.editGoal', function () {
 $(document).on('click', '.delGoal', function () {
     // $(this).css('display','none'); 수정 시 버튼들 사라지기
     $(this).parent().parent().parent().remove();
-    $.post('swan/title/del',{})
+    const removeGoalID=$(this).parent().parent().prev().children().attr('id');
+
+    $.post('swan/title/del',{TitleID:removeGoalID})
 });
 
