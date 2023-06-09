@@ -1,0 +1,27 @@
+<div class="tab-pane fade show" id="<%= tabTarget %>" role="tabpanel" >
+    <div class="container-fluid">
+        <div class="row" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card">
+
+                    <img src="<%= feedData.feedImgPath %>" class="card-img-top">
+                    <!-- feed Image -->
+                    <div class="card-body">
+                        <div class="card-text">
+                            <h3>
+                                <%= feedData.feedGoal %>
+                            </h3>
+                            <p>
+                                <%= feedData.feedMemo %>
+                            </p>
+                            <p style="text-align:right;"> time </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--row closing tag-->
+    </div><!--container-fluid closing tag-->
+</div><!--tab paned closing tag-->
+
+<!-- "feedGoal":"asd","feedMemo":"124","feedImg": -->
+<!-- <%= feedData.feedImg %> -->

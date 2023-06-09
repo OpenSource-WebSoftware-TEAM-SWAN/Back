@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap-5.3.0-alpha3-dist/css/bootstrap.rtl.min.css">
+    <link href="/stylesheets/login.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/bootstrap-5.3.0-alpha3-dist/js/bootstrap.min.js" defer></script>
+
+    <title>Sign up</title>
+</head>
+
+<body>
+    <div class="loginlogin">
+        <p style="font-size: 64px;">Sign up</p>
+    </div>
+    <div class="container-login" style="display: none;">
+        <div class="login-wrapper">
+            <div class="goqhfrp">
+                <h3 style="color:#f26322" class="upupupup">SWAN</h3>
+                <p style="color:#f8f8f8">With your a little step</p>
+                </div>
+            <form id="login-form" action="/register" method="post">
+                <input type="text" name="signUpID" placeholder="Email" id="LOGIN_ID" autofocus>
+                <input type="password" name="signUpPW" placeholder="Password" id="LOGIN_PW">
+                <input type="password" name="confirmPW" placeholder="Confirm Password" id="LOGIN_CONFIRM">
+                <input type="text" name="signUpName" placeholder="Name" id="LOGIN_NAME">
+                <input type="submit" value="Sign up" id="LOGIN_BTN" disabled>
+            </form>
+        </div>
+    </div>
+    <script>
+        const loginId = document.getElementById('LOGIN_ID');
+        const loginPw = document.getElementById('LOGIN_PW');
+        const loginBtn = document.getElementById('LOGIN_BTN');
+
+        function color() {
+            if ((loginId.value.length > 0 && loginId.value.indexOf("@") !== -1)
+                && loginPw.value.length >= 4) {
+                loginBtn.style.backgroundColor = "#F7591D";
+                loginBtn.disabled = false;
+            } else {
+                loginBtn.style.backgroundColor = "#acb0ac";
+                loginBtn.disabled = true;
+            }
+        }
+
+        function hovering() {
+            loginBtn.style.opacity = "0.9";
+        }
+
+        function unhovering() {
+            loginBtn.style.opacity = "1.0";
+        }
+
+        function moveToMain() {
+            location.replace("www.google.com");
+        }
+
+        loginId.addEventListener('keyup', color);
+        loginPw.addEventListener('keyup', color);
+        loginBtn.addEventListener('click', moveToMain);
+        loginBtn.addEventListener('mouseover', hovering);
+        loginBtn.addEventListener('mouseout', unhovering);
+
+        // 배경 이미지 로드를 감지하는 함수
+        function imageLoaded() {
+            var myDiv = document.querySelector('.container-login');
+            myDiv.style.display = 'block'; // 요소를 나타내도록 변경
+        }
+
+        // 이미지 로드를 위한 이벤트 리스너 추가
+        var backgroundImage = new Image();
+        backgroundImage.onload = imageLoaded;
+        backgroundImage.src = '/images/night6.jpg'; // 실제로 사용하는 배경 이미지의 경로로 변경해야 합니다.
+
+    </script>
+</body>
+
+</html>
