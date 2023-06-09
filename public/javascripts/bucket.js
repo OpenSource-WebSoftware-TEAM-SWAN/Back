@@ -1,5 +1,3 @@
-
-
 var nav_cnt = 0;
 
 $(document).ready(function () {
@@ -16,29 +14,42 @@ $(document).ready(function () {
     $currentTabContent.imagesLoaded(function () {
       // 이미지 로드 완료 후 Masonry 업데이트
       $grid.masonry("layout");
-      
+      console.log("nav link event");
       // 스크롤 초기화
       $currentTabContent.closest(".tab-content").scrollTop(0);
-      
-      
-
     });
-  }).on('click',function(){
-    // TODO : 탭 변경 시 url에 소제목 pk(button id value)값 추가
-    
-    const getSubTitlePk=$(this).attr('id');
-    $.get('/user/goal/custom/goal',{subTitlePK:getSubTitlePk}).done()
+  });
+  /* 소제목 버튼 클릭시 url에 추가  */
+  $('.nav-link.custom-button').on('click',function(){
+    console.log('Click');
+    // 현재 선택된 탭의 id 값을 가져옴
+    var subPK = $(".nav-link.custom-button.active").attr("id");
+    // URL에 파라미터 추가
+    var url = new URL(window.location.href);
+    url.searchParams.set("subTitlePK", subPK);
+    history.pushState(null, "", url.toString());
+    // $.get('/user/goal/custom/goal', { subTitlePK: subTitlePK })
+    //   .done(function (response) {
+    //     // 성공적인 응답을 받았을 때 수행할 동작
+    //     console.log(response);
+    //   })
+    //   .fail(function (error) {
+    //     // 요청이 실패했을 때 수행할 동작
+    //     console.error(error);
+    //   });
   });
 });
 
-// 탭 추가 버튼
-$('.linkPlus').click(function (){
+// 소제목 추가
+$('.linkPlus').click(function () {
+  
   let tmpNav = 'nav-' + nav_cnt;
   let str;
   let subTitlePkDate = Date.now();
   subTitlePkDate = String(subTitlePkDate);
   const urlParams = new URLSearchParams(window.location.search);
   const pk = urlParams.get('pk');
+  // 버튼 내용
   str =
     '<button class="nav-link custom-button" ' +
     'data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
@@ -67,15 +78,15 @@ $('.linkPlus').click(function (){
           nav_cnt++;
 
           // 서버와 통신  parameter : 소제목 소제목 pk값
-          $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function(response) {
+          $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function (response) {
             console.log(response); // 서버 응답 확인
           });
-          
+
 
           return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id='+subTitlePkDate+'>' + newGoalElement + ' </button>');
+            'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + '>' + newGoalElement + ' </button>');
         });
-        
+
       }
     }).on('blur', function () {
       let newGoalElement = $(this).val();
@@ -92,15 +103,15 @@ $('.linkPlus').click(function (){
         nav_cnt++;
 
         // 서버와 통신  parameter : 소제목 소제목 pk값
-        console.log(subTitlePkDate,newGoalElement);
-        $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function(response) {
+        console.log(subTitlePkDate, newGoalElement);
+        $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function (response) {
           console.log(response); // 서버 응답 확인
         });
-        
+
 
         return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" type="button" ' +
-          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id='+subTitlePkDate+'>' + newGoalElement + '</button>');
-          
+          'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + '>' + newGoalElement + '</button>');
+
       });
     });
   });

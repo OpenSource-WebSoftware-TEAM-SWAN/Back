@@ -1,3 +1,5 @@
+var imgArray=[]
+
 $(document).ready(function () {
     $('img').on("error", function () {
         $(this).attr("src", "/images/이지형.png");
@@ -34,6 +36,7 @@ $(document).ready(function () {
 
     // 게시하기
     $(document).on('click', '.writeSeed_body_btn', function (e) {
+        
         e.preventDefault(); // DB 연결 시 삭제
         if ($('#seedGoal').val() != 0) {
             let selectedTab = $('#nav-tabContent .tab-pane.active');
@@ -118,6 +121,7 @@ $(document).ready(function () {
                     console.log(error);
                 }
             });
+            $('#uploadImg').val("");
             $('.writeSeedClose').click();
         }
     });

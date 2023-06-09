@@ -5,65 +5,62 @@ const btnOpenPopup = document.querySelector('.btnNaviBar');
 const mainNav = document.querySelector('.main-nav');
 
 btnOpenPopup.addEventListener('click', () => {
-    navModal.style.display='inline-block';
-    btnOpenPopup.style.display='none';
+    navModal.style.display = 'inline-block';
+    btnOpenPopup.style.display = 'none';
 
-    if (navModal.style.display='inline-block') {// 화면 고정
-        body.style.overflow = 'hidden'; 
+    if (navModal.style.display = 'inline-block') {// 화면 고정
+        body.style.overflow = 'hidden';
         mainNav.style.overflowY = 'auto';
     }
 });
 
 navModal.addEventListener('click', (event) => {
     if (event.target === navModal) { // 외부 클릭 시 창닫음
-        navModal.style.display='';
-        btnOpenPopup.style.display='inline-block';
+        navModal.style.display = '';
+        btnOpenPopup.style.display = 'inline-block';
 
-        if (navModal.style.display!='inline-block') {  // 화면 고정 해제
+        if (navModal.style.display != 'inline-block') {  // 화면 고정 해제
             body.style.overflowX = 'hidden';
         }
     }
 });
 
-var toggled=0;
-var titleCnt=0;
+var toggled = 0;
+var titleCnt = 0;
 $(document).ready(function () {
     // const {loginUser,titlePK}=require('./login.js');
-    
-    
-    
+
+
+
     $("#images-modal").load("/imagesModal.html");
 
     // 목표 추가
-    $('.add-title').click(function(){
-        let pkDate=Date.now();
-        pkDate=String(pkDate);
-        let str;
-        if(titleCnt>0){
-        str="<ul class='elementGoal'>"+
-        "<li><a class='aGoal' id='temp'>새 목표("+titleCnt+")</a></li>"+
-        "<li class='exception'><div style='float:right;'>"+
-            "<button class='editGoal'>수정</button>"+"&nbsp;"+
-            "<button class='delGoal'>삭제</button>"+
-        "</div></li>"+
-    "</ul>"
-        }
-        else{
-        str="<ul class='elementGoal'>"+
-        "<li><a class='aGoal' id='temp'>새 목표</a></li>"+
-        "<li class='exception'><div style='float:right;'>"+
-            "<button class='editGoal'>수정</button>"+"&nbsp;"+
-            "<button class='delGoal'>삭제</button>"+
-        "</div></li>"+
-    "</ul>"
-        }
+    $('.add-title').click(function () {
+        let pkDate = Date.now();
+        pkDate = String(pkDate);
+        let str="<ul class='elementGoal'>" +
+        "<li><a class='aGoal' id='temp'>새 목표</a></li>" +
+        "<li class='exception'><div style='float:right;'>" +
+        "<button class='editGoal'>수정</button>" + "&nbsp;" +
+        "<button class='delGoal'>삭제</button>" +
+        "</div></li>" +
+        "</ul>";
+
         $('.headline-info').prepend(str);
         titleCnt++;
-        
-        $('#temp').attr("id",pkDate);
-        $.post('/swan/sendTitle',{
-            headTitle:$('.aGoal')[0].text,
-            titlePk:pkDate
+
+        $('#temp').attr("id", pkDate);
+        $.post('/swan/sendTitle', {
+            headTitle: $('.aGoal')[0].text,
+            titlePk: pkDate
+        });
+        $('.elementGoal').hover(function () {
+            // alert("fudk");
+            $(this).children('.exception').children('div').children('.editGoal').css('display', 'inline-block');
+            $(this).children('.exception').children('div').children('.delGoal').css('display', 'inline-block');
+        }, function () {
+            $(this).children('.exception').children('div').children('.editGoal').css('display', 'none');
+            $(this).children('.exception').children('div').children('.delGoal').css('display', 'none');
         });
     });
 
@@ -71,41 +68,49 @@ $(document).ready(function () {
     $(document).on('click', '.aGoal', function () {
         // 해당 요소의 데이터를 가져올 수 있는 방법에 따라 다른 페이지로 리다이렉션하거나 데이터를 전달할 수 있습니다.
         var headTitle = $(this).text().trim(); // 클릭한 요소의 텍스트 가져오기
-        var titlepk=$(this).attr('id');
-        
+        var titlepk = $(this).attr('id');
+
         // window.location.href = '/user/goal/' + encodeURIComponent(headTitle); // 다른 페이지로 리다이렉션
-        $.get('/swan/convertPage',{headTitle:headTitle,titlepk:titlepk},function(data){
-            window.location.href=data.url
+        $.get('/swan/convertPage', { headTitle: headTitle, titlepk: titlepk }, function (data) {
+            window.location.href = data.url
         })
     });
-    
+
     // 최근항목
-    $('.divRecentSeed').click(function(){
+    $('.divRecentSeed').click(function () {
         $('.divRecentSeedOpen').slideToggle("fast");
-        if(toggled==1){
-            $('.imgToggle').attr("src","images/button_down.png");
-            toggled=0;
+        if (toggled == 1) {
+            $('.imgToggle').attr("src", "images/button_down.png");
+            toggled = 0;
         }
-        else if(toggled==0){
-            $('.imgToggle').attr("src","images/button_up.png");
-            toggled=1;
+        else if (toggled == 0) {
+            $('.imgToggle').attr("src", "images/button_up.png");
+            toggled = 1;
         };
     });
 
     //검색
-    $('#searchBox').focus(function(){
-        $('.divSearch').css('border','1px solid #f26322');
+    $('#searchBox').focus(function () {
+        $('.divSearch').css('border', '1px solid #f26322');
     });
 
-    $('#searchBox').blur(function(){
-        $('.divSearch').css('border','1px solid black');
+    $('#searchBox').blur(function () {
+        $('.divSearch').css('border', '1px solid black');
+    });
+    $('.elementGoal').hover(function () {
+        // alert("fudk");
+        $(this).children('.exception').children('div').children('.editGoal').css('display', 'inline-block');
+        $(this).children('.exception').children('div').children('.delGoal').css('display', 'inline-block');
+    }, function () {
+        $(this).children('.exception').children('div').children('.editGoal').css('display', 'none');
+        $(this).children('.exception').children('div').children('.delGoal').css('display', 'none');
     });
 });
 
-$(document).on('click','.imgGoal',function(){
+$(document).on('click', '.imgGoal', function () {
     $(this).next().next().next().slideToggle(90);
 });
-$(document).on('click','.imgSub',function(){
+$(document).on('click', '.imgSub', function () {
     $(this).next().next().next().slideToggle(90);
 });
 
@@ -125,14 +130,11 @@ $(document).on('click', '.editGoal', function () {
             className = $(this).attr('class');
             let changeGoalElement = $(this).text();
 
-            let $inputElement = $("<input class='aGoal' style='width: 70%'>", {
-                type: 'text',
-                value: changeGoalElement
-            });
+            let $inputElement = $("<input class='aGoal' "+"value='"+changeGoalElement+"'"+" style='width: 100%; outline:#f26322 1px solid; border:0;'>");
 
             let $newAnchorElement = $("<a class='aGoal' href='#' id='" + titlePk + "'>" + changeGoalElement + "</a>");
             // $('#temp').attr("id",pkDate);
-            
+
             // $newAnchorElement.on('click', handleGoalClick); // 클릭 이벤트 핸들러 등록
 
             $inputElement.on('click', function (e) {
@@ -154,7 +156,7 @@ $(document).on('click', '.editGoal', function () {
                     });
 
                     $inputElement.replaceWith($newAnchorElement);
-                    
+
                     e.preventDefault();
                 }
             }).on('blur', function () {
@@ -181,3 +183,10 @@ $(document).on('click', '.editGoal', function () {
         });
     });
 });
+//삭제하기
+$(document).on('click', '.delGoal', function () {
+    // $(this).css('display','none'); 수정 시 버튼들 사라지기
+    $(this).parent().parent().parent().remove();
+    $.post('swan/title/del',{})
+});
+

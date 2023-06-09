@@ -126,33 +126,33 @@
     <div id="tabs">
       <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-          <button class="nav-link active custom-button" id="nav-fr-tab" data-bs-toggle="tab" data-bs-target="#nav-fr"
-            type="button" role="tab" aria-controls="nav-fr" aria-selected="true" >프랑스</button>
-          
-
+          <% var i=0 %>
+          <% subTitles.forEach((sub)=>{ i++%>
+            <button class="nav-link custom-button" 
+              id="<%= sub.subTitlePK %>"
+              data-bs-toggle="tab" 
+              data-bs-target="#<%= i %>"
+              type="button" role="tab" aria-controls="<%= i %>"
+              aria-selected="false" 
+              data-index="<%= i %>"/>
+            <%= sub.subTitle %>
+            </button>  
+          <% }) %>
+          <!-- <button class="nav-link active custom-button" id="nav-fr-tab" data-bs-toggle="tab" data-bs-target="#nav-fr"
+            type="button" role="tab" aria-controls="nav-fr" aria-selected="true" >프랑스</button> -->
           <button class="nav-link linkPlus">+</button>
         </div>
       </nav>
     </div>
     <div id="nav-tabContent" class="tab-content"><!--실제로 출력되는 부분-->
-
       <div class="tab-pane fade show active" id="nav-fr" role="tabpanel" aria-labelledby="nav-fr-tab">
         <div class="container-fluid">
           <div class="row" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
-            <% for(var i=0; i<feedArray.length; i++){ %>
-              <%= i %>
-              <%- include('goalCard', { feedData: feedArray[i] }) %>
-            <% } %>
-            
-            
-            
-            <!-- <a href="#" class="btn-card">수정</a>
-            <a href="#" class="btn-card">삭제</a>
-            <img src="./images/bookmark.png" width="30px" height="30px"> -->
             
           </div><!--row closing tag-->
         </div><!--container-fluid closing tag-->
       </div><!--tab paned closing tag-->
+      
 
       
     </div><!--nav-tabContent closing tag-->
