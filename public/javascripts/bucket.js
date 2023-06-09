@@ -1,4 +1,4 @@
-var nav_cnt = 0;
+
 
 $(document).ready(function () {
   // Masonry 초기화
@@ -14,36 +14,30 @@ $(document).ready(function () {
     $currentTabContent.imagesLoaded(function () {
       // 이미지 로드 완료 후 Masonry 업데이트
       $grid.masonry("layout");
-      console.log("nav link event");
+      
       // 스크롤 초기화
       $currentTabContent.closest(".tab-content").scrollTop(0);
     });
   });
   /* 소제목 버튼 클릭시 url에 추가  */
   $('.nav-link.custom-button').on('click',function(){
-    console.log('Click');
+    
     // 현재 선택된 탭의 id 값을 가져옴
     var subPK = $(".nav-link.custom-button.active").attr("id");
+    let subTabTarget=$(this).attr('data-index');
     // URL에 파라미터 추가
     var url = new URL(window.location.href);
     url.searchParams.set("subTitlePK", subPK);
     history.pushState(null, "", url.toString());
-    // $.get('/user/goal/custom/goal', { subTitlePK: subTitlePK })
-    //   .done(function (response) {
-    //     // 성공적인 응답을 받았을 때 수행할 동작
-    //     console.log(response);
-    //   })
-    //   .fail(function (error) {
-    //     // 요청이 실패했을 때 수행할 동작
-    //     console.error(error);
-    //   });
+    $.get('/user/goal/custom/goal', { subTitlePK: subPK,tabTarget:subTabTarget});
+      
   });
 });
 
 // 소제목 추가
 $('.linkPlus').click(function () {
-  
-  let tmpNav = 'nav-' + nav_cnt;
+  let nav_cnt=$(this).prev().attr('data-index')+1;
+  let tmpNav = nav_cnt;
   let str;
   let subTitlePkDate = Date.now();
   subTitlePkDate = String(subTitlePkDate);

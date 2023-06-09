@@ -126,8 +126,9 @@
     <div id="tabs">
       <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <!-- subTitle : server side rendering -->
           <% var i=0 %>
-          <% subTitles.forEach((sub)=>{ i++%>
+          <% subTitles.forEach((sub)=>{ i++ %>
             <button class="nav-link custom-button" 
               id="<%= sub.subTitlePK %>"
               data-bs-toggle="tab" 
@@ -145,14 +146,11 @@
       </nav>
     </div>
     <div id="nav-tabContent" class="tab-content"><!--실제로 출력되는 부분-->
-      <div class="tab-pane fade show active" id="nav-fr" role="tabpanel" aria-labelledby="nav-fr-tab">
-        <div class="container-fluid">
-          <div class="row" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
-            
-          </div><!--row closing tag-->
-        </div><!--container-fluid closing tag-->
-      </div><!--tab paned closing tag-->
-      
+      <!-- 소제목에 따라 피드들 서버 사이드 렌더링 부분 -->
+      <% i=0 %>
+      <% subTitles.forEach((sub)=>{ i++ %>
+        <%- include('goalCard', { feedData: feedArray, tabTarget: i }) %>
+      <% }); %>
 
       
     </div><!--nav-tabContent closing tag-->

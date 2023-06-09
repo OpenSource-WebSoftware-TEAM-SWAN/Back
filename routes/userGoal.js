@@ -8,6 +8,7 @@ const localStorage = new LocalStorage('./scratch/contentJSON');
 const subLocalStorage = new LocalStorage('./scratch/contentJSON');
 // let titleArray = require('./swan.js');
 var activeSubTitle;
+var activeSubTitlePK;
 
 
 const path = require('path');
@@ -52,40 +53,41 @@ router.get('/', function (req, res, next) {
 
   /** 첫 번째 subTitle을 가져온 다음 거기에 맞는 피드들을 보여줌 */
 
-  // activeSubTitlePK = subTitleArray.find(sub => sub.TitlePK === pk);
-  // console.log(activeSubTitlePK);
-  // if (activeSubTitlePK) {
-  //   console.log("if case")
-  //   // 첫 번째 subTitle의 feedArray를 가져옴
-  //   activeSubTitlePK=activeSubTitlePK.subTitlePK;
-  //   filteredFeedArray = feedArray.filter(feed => feed.subTitlePK === activeSubTitlePK);
-  // }
-  // else{
-  //   console.log("else case")
-  //   filteredFeedArray=[];
-  // }
+  let activeSubTitlePK = subTitleArray.find(sub => sub.TitlePK === pk);
+  console.log(activeSubTitlePK);
+  if (activeSubTitlePK) {
+    console.log("if case")
+    // 첫 번째 subTitle의 feedArray를 가져옴
+    activeSubTitlePK=activeSubTitlePK.subTitlePK;
+    filteredFeedArray = feedArray.filter(feed => feed.subTitlePK === activeSubTitlePK);
+  }
+  else{
+    console.log("else case")
+    filteredFeedArray=[];
+  }
 
   /** end */
 
   // console.log("#############"+filteredFeedArray);
-  // res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray });
-  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser,subTitles:activeSubTitle});
+  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray,subTitles:activeSubTitle,tabTarget:"1" });
+  // res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser,subTitles:activeSubTitle});
 });
 
 
-
+// feed rendering
 router.get('/custom/goal', (req, res, next) => {
   console.log(req.body);
   const subTitlePK = req.body.subTitlePK;
+  const tabTarget=req.body.tabTarget;
   console.log(subTitlePK);
   // const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
   // const userArray = JSON.parse(userJSONFile);
   const getCustomFeed = fs.readFileSync('./scratch/contentJSON/feed', 'utf-8');
   const feedArray = JSON.parse(getCustomFeed);
-  console.log(feedArray);
-  const filteredFeedArray = feedArray.filter(feed => { console.log(feed); feed.subTitlePK === subTitlePK });
+  // console.log(feedArray);
+  const filteredFeedArray = feedArray.filter(feed => { feed.subTitlePK === subTitlePK });
   console.log(filteredFeedArray);
-  res.json({ feedArray: filteredFeedArray });
+  res.json({ feedArray: filteredFeedArray,tabTarget:tabTarget});
 
 });
 
