@@ -128,12 +128,12 @@
         }
         @font-face {
             font-family: 'melona';
-            src: url('fonts/BinggraeMelona-Bold.ttf') format('truetype');
+            src: url('/fonts/BinggraeMelona-Bold.ttf') format('truetype');
         }
 
         @font-face {
             font-family: 'fira';
-            src: url('fonts/FiraSansExtraCondensed-Regular.ttf') format('truetype');
+            src: url('/fonts/FiraSansExtraCondensed-Regular.ttf') format('truetype');
         }
         #placeholder {
             font-family: 'melona';

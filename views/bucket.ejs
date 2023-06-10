@@ -100,9 +100,11 @@
         </div>
         <div class="divRecentSeedOpen">
           <div class="divRecentContent">
-            <a href="">seed1</a><br>
-            <a href="">seed2</a><br>
-            <a href="">seed3</a><br>
+            <% userContent.reverse().forEach((item,index)=>{ %>
+              <% if(index < 3){ %>
+                <%- include('navContent',{userItem:item}) %>
+              <% } %>
+            <% }) %>
           </div>
         </div>
         <!-- END Recent Seeds -->

@@ -58,9 +58,11 @@
       </div>
       <div class="divRecentSeedOpen">
           <div class="divRecentContent">
-              <a href="">seed1</a><br>
-              <a href="">seed2</a><br>
-              <a href="">seed3</a><br>
+            <% userContent.reverse().forEach((item,index)=>{ %>
+              <% if(index < 3){ %>
+                <%- include('navContent',{userItem:item}) %>
+              <% } %>
+            <% }) %>
           </div>
       </div>
       <!-- END Recent Seeds -->
@@ -84,7 +86,7 @@
   <div id="pageHeader">
     <h1 class="swan-logo">SWAN</h1>
     <div class="logout-btn">
-        <button class="btnLogout" onclick="">Logout</button>
+        <button class="btnLogout" onclick="alert('logout!')"><a href="/">Logout</a></button>
     </div>
   </div>
   <div id="tabs">
@@ -106,41 +108,13 @@
 <div class="downpage section">
     <div class="container-fluid">
         <div class="row" id="images-container" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
+          
           <div class="col-6 col-md-4 col-lg-3">
             <div class="card">
               <img src="/images/tower.jpg" class="card-img-top">
             </div>
           </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/루브르.jpg" class="card-img-top">
-          </div>
-        </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/monarisa.jpg" class="card-img-top">
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/tower.jpg" class="card-img-top">
-          </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/tower.jpg" class="card-img-top">
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/루브르.jpg" class="card-img-top">
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/monarisa.jpg" class="card-img-top">
-            </div>
-          </div>
+          
       </div><!--row closing tag-->
     </div><!--container-fluid closing tag-->
 </div>
