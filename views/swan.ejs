@@ -38,7 +38,7 @@
           </div>
           <div class="user-infoStat">
               <p id="userName"><%= userName %></p>
-              <p id="userIntro">오늘도 힘차고 굳센 하루!</p>
+              <p id="userIntro">Believe in yourself</p>
           </div>
       </div>
       <!-- END user brief unfo -->
@@ -52,7 +52,7 @@
       </div>
       <div class="divRecentSeed">
           <div class="divRecentSeedIn">
-              <button class="btnRecentSeed"><img class="imgToggle" src="images/button_down.png" alt="down">&nbsp;최근&nbsp;항목</button>
+              <button class="btnRecentSeed"><img class="imgToggle" src="images/button_down.png" alt="down">&nbsp;Recent&nbsp;</button>
           </div>
       </div>
       <div class="divRecentSeedOpen">
@@ -67,7 +67,7 @@
       <!-- END Recent Seeds -->
 
       <!-- headline toggle -->
-      <button class="add-title">버킷리스트 추가</button>
+      <button class="add-title">Add Goal</button>
       <div class="headline-info" id="headline">
         <% [...userContent].reverse().forEach(function(item) { %>
           <%- include('navContent',{userItem:item}) %>

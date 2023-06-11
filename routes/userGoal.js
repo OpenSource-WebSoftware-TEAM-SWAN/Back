@@ -198,15 +198,14 @@ router.post('/goalRate', function (req, res) {
   console.log(obj);
   const titleFile = localStorage.getItem("title");
   let titleArray = JSON.parse(titleFile);
-  console.log(titleArray);
   titleArray.forEach((title) => {
     if (title.titlePK == obj.titlePK) {
-      title.goalRate = parseFloat(Number(obj.check_cnt) / Number(obj.subNum));
+      title.goalRate = parseFloat(Number(obj.check_cnt) / Number(obj.subNum)).toPrecision(2);
+      console.log(title.goalRate);
       return;
     }
   });
   localStorage.setItem("title", JSON.stringify(titleArray));
-
   res.status(200);
 });
 

@@ -39,11 +39,17 @@
     transform: translateX(-50%) translateY(-50%);
 }
 
+.writeSeedClose{
+    position: absolute;
+    top: 20px;
+    right: 10px;
+}
+
 .writeSeed_body * {
     /*모딜창 내부 스크롤*/
     display: block;
     text-align: left;
-    overflow: scroll;
+    overflow-y:scroll;
 }
 
 .writeSeed_body input[type=text] {
@@ -59,6 +65,7 @@
     /*업로드된 이미지 프리뷰*/
     width: 100%;
     height: 30vh;
+    overflow-y: scroll;
 }
 
 .writeSeed_body_img img {
@@ -92,11 +99,9 @@
 }
 
 .writeSeed_submit{
-    width: 100%;
     color: white;
     background-color: #F7591D;
     overflow: hidden;
-    text-align: center;
     border: 0;
     border-radius: 6px;
     font-size: x-large;
@@ -105,4 +110,12 @@
 
 .writeSeed_submit:hover{
     background-color: #ff8344;
+}
+
+.writeSeed_body_btn{
+    position: absolute;
+    display: flex;
+    overflow: hidden;
+    bottom: 2%;
+    right: 3%;
 }

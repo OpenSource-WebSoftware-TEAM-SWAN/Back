@@ -1,5 +1,5 @@
 mobiscroll.setOptions({
-    locale: mobiscroll.localeKo,
+    locale: mobiscroll.localeen,
     theme: 'auto',
     themeVariant: 'light'
 });

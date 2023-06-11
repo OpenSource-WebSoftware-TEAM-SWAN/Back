@@ -39,10 +39,10 @@ $(document).ready(function () {
         let pkDate = Date.now();
         pkDate = String(pkDate);
         let str="<ul class='elementGoal'>" +
-        "<li><a class='aGoal' id='temp'>새 목표</a></li>" +
+        "<li><a class='aGoal' id='temp'>New Goal</a></li>" +
         "<li class='exception'><div style='float:right;'>" +
-        "<button class='editGoal'>수정</button>" + "&nbsp;" +
-        "<button class='delGoal'>삭제</button>" +
+        "<button class='editGoal'>Edit</button>" + "&nbsp;" +
+        "<button class='delGoal'>Delete</button>" +
         "</div></li>" +
         "</ul>";
         

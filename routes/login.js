@@ -8,12 +8,11 @@ const { LocalStorage } = require('node-localstorage');
 const fs = require('fs');
 const crypto = require('crypto');
 const { loadavg } = require('os');
-
+let loginUser;
 
 // 로컬 스토리지 인스턴스 생성
 const localStorage = new LocalStorage('./scratch/userJSON');
 const contnetLocalStorage = new LocalStorage('./scratch/contentJSON');
-let userContent = [];
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('about');
@@ -68,11 +67,11 @@ router.post('/swan', function (req, res) {
   let labels = [];
   let data = [];
 
-  let loginUser = null;
+  
 
   const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
   const userArray = JSON.parse(userJSONFile);
-
+  let userContent = [];
   userArray.forEach((user) => {
     if (user.email === email && user.pw === pw) {
       loginUser = user;
@@ -114,11 +113,18 @@ router.post('/swan', function (req, res) {
 router.get('/swan/chart/data',function(req,res){
   let labels=[];
   let data=[];
+  let checkTitleJson = contnetLocalStorage.getItem("title");
+  let titleArray = JSON.parse(checkTitleJson);
+  let userContent=[];
+      titleArray.forEach((title) => {
+        if (title.userPK === loginUser.pk) {
+          userContent.push(title);
+        }
+      });
   userContent.forEach(title => {
     labels.push(title.headTitle);
-    data.push(title.goalRate);
+    data.push(title.goalRate*100);
   })
-  console.log("차트 데이터 : "+labels,data)
   res.json({labels:labels,data:data})
 });
 
