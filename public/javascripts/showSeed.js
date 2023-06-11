@@ -5,18 +5,34 @@ function showSeed(){
 };
 
 $(document).ready(function(){
-    //화면 끄기
+    // 화면 끄기
     $('.seedViewBg').click(function(e){
         $('.seedViewBg').css('display','none');
         $('.seedView').css('display','none');
     });
 
-        // 값 불러오기
-        $('.card').click(function(){
-            let pos=$(this).children('div').children('div');
-            $('.seedView_goal').text(pos.children('h3').text());
-            $('.seedView_memo').text(pos.children('p:eq(0)').text());
-            $('.seedView_time').text(pos.children('p:eq(1)').text());
-        })
-});
+    // 값 불러오기
+    $('.card').click(function(){
+        let currentPeed = $(this);
+        let pos=$(this).children('div').children('div');
 
+        // 이미지 불러오기
+        let src=$(this).children('img').attr('src');
+        $('.seedView_imgs').children('img').attr('src',src);
+
+        // 텍스트 불러오기
+        $('.seedView_goal').text(pos.children('h3').text());
+        $('.seedView_memo').text(pos.children('p:eq(0)').text());
+        $('.seedView_time').text(pos.children('p:eq(1)').text());
+
+        $('.delPeed').click(function(){
+            $('.seedViewBg').click();
+            currentPeed.remove();
+            let $grid2 = $(".row").masonry({
+                percentPosition:true,
+            });
+            $grid2.masonry('reloadItems');
+            $grid2.masonry('layout');
+        });
+    })
+});

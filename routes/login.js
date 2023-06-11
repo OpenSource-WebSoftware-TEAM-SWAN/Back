@@ -8,6 +8,8 @@ const { LocalStorage } = require('node-localstorage');
 const fs = require('fs');
 const crypto = require('crypto');
 const { loadavg } = require('os');
+const cookieParser=require('cookie-parser');
+const session = require('express-session');
 let loginUser;
 
 // 로컬 스토리지 인스턴스 생성
@@ -59,7 +61,11 @@ router.post('/register', function (req, res) {
 
   res.send('<script>alert("회원가입에 성공했습니다."); window.location.href="/";</script>');
 });
-
+//홈 버튼 눌렀을때
+router.get('/swan', function (req, res) {
+  let userContent=getUserContent();
+  res.render('swan',{userName:loginUser.name,userContent:userContent});
+});
 
 router.post('/swan', function (req, res) {
   const email = req.body.userID;
@@ -72,9 +78,11 @@ router.post('/swan', function (req, res) {
   const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
   const userArray = JSON.parse(userJSONFile);
   let userContent = [];
+  
   userArray.forEach((user) => {
     if (user.email === email && user.pw === pw) {
       loginUser = user;
+      
       return;
     }
 
@@ -88,23 +96,22 @@ router.post('/swan', function (req, res) {
     
 
     let checkTitleJson = contnetLocalStorage.getItem("title");
+    
 
     if (checkTitleJson) {
       titleArray = JSON.parse(checkTitleJson);
-
+    
       titleArray.forEach((title) => {
         if (title.userPK === authUser) {
           userContent.push(title);
         }
-
       });
-
-      
+    
+      module.exports = { loginUser, userContent };      
+      res.render('swan', { userName: loginUser.name, userContent: userContent });
     }
-
-    module.exports = { loginUser, userContent };
-
-    res.render('swan', { userName: loginUser.name, userContent: userContent});
+    
+    
   } else {
     // 로그인 실패
     res.send("<script>alert('로그인 실패');window.location.href='/'</script>");
@@ -113,6 +120,16 @@ router.post('/swan', function (req, res) {
 router.get('/swan/chart/data',function(req,res){
   let labels=[];
   let data=[];
+  let userContent=[];
+
+  userContent=getUserContent();
+  userContent.forEach(title => {
+    labels.push(title.headTitle);
+    data.push(title.goalRate*100);
+  })
+  res.json({labels:labels,data:data})
+});
+function getUserContent(){
   let checkTitleJson = contnetLocalStorage.getItem("title");
   let titleArray = JSON.parse(checkTitleJson);
   let userContent=[];
@@ -121,11 +138,6 @@ router.get('/swan/chart/data',function(req,res){
           userContent.push(title);
         }
       });
-  userContent.forEach(title => {
-    labels.push(title.headTitle);
-    data.push(title.goalRate*100);
-  })
-  res.json({labels:labels,data:data})
-});
-
+  return userContent;
+}
 module.exports = router;

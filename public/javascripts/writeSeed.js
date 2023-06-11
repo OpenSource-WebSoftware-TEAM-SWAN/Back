@@ -58,7 +58,7 @@ $(document).ready(function () {
             let imageUrl=file?URL.createObjectURL(file):'/images/monarisa.jpg'
             let str =
                 '<div class="col-6 col-md-4 col-lg-3">' +
-                '<div class="card" onClick="seedShow()">' +
+                '<div class="card" onClick="showSeed()">' +
                 '<img src="' + imageUrl + '" class="card-img-top">'  + // 내부 이미지의 첫 번째
                 '<div class="card-body">' +
                 '<div class="card-text">' +
@@ -77,12 +77,30 @@ $(document).ready(function () {
             $('.writeSeed_body_img').children('img').remove();
 
             // 피드 보기
-            $('.card').click(function () {
+                // 값 불러오기
+            $('.card').click(function(){
+                let currentPeed = $(this);
                 let pos=$(this).children('div').children('div');
+
+                // 이미지 불러오기
+                let src=$(this).children('img').attr('src');
+                $('.seedView_imgs').children('img').attr('src',src);
+
+                // 텍스트 불러오기
                 $('.seedView_goal').text(pos.children('h3').text());
                 $('.seedView_memo').text(pos.children('p:eq(0)').text());
                 $('.seedView_time').text(pos.children('p:eq(1)').text());
-            });
+
+                $('.delPeed').click(function(){
+                    $('.seedViewBg').click();
+                    currentPeed.remove();
+                    let $grid2 = $(".row").masonry({
+                        percentPosition:true,
+                    });
+                    $grid2.masonry('reloadItems');
+                    $grid2.masonry('layout');
+                });
+            })
             
             
             let formData = new FormData();
@@ -137,6 +155,7 @@ $(document).ready(function () {
         }
     });
 
+    // TODO 렌더링 되는 이미지들  masonry적용 안되는 이유?
     $grid2.masonry('reloadItems');
     $grid2.masonry('layout');
 });

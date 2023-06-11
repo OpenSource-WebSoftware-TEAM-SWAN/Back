@@ -17,7 +17,7 @@
 </head>
 
 <body>
-
+  <i class="btnHome fa-sharp fa-solid fa-house"></i>
   <!--피드 작성---------------------------------------------------------------->
   <div class="writeSeed">
     <div class="container-fluid">
@@ -57,8 +57,9 @@
   <!--피드 뷰 모달---------------------------------------------------------------->
   <div class="seedViewBg"></div>
   <div class="seedView">
+    <i class="delPeed fa-solid fa-trash"></i>
     <div class="seedView_imgs">
-      <img src="images/night4.jpg" alt="">
+      <img src="/images/night4.jpg" alt="">
     </div>
     <div class="seedView_text">
       <p class="seedView_goal"></p>
@@ -107,7 +108,7 @@
         </div>
         <div class="divRecentSeedOpen">
           <div class="divRecentContent">
-            <% userContent.reverse().forEach((item,index)=>{ %>
+            <% [...userContent].reverse().forEach((item,index)=>{ %>
               <% if(index < 3){ %>
                 <%- include('navContent',{userItem:item}) %>
                   <% } %>
@@ -119,7 +120,7 @@
         <!-- headline toggle -->
         <button class="add-title">Add Goal</button>
         <div class="headline-info" id="headline">
-          <% userContent.reverse().forEach(function(item) { %>
+          <% [...userContent].reverse().forEach(function(item) { %>
             <%- include('navContent',{userItem:item}) %>
               <% }); %>
         </div class="btntoTop">
@@ -160,7 +161,7 @@
       <% for (var j = 1; j <= subTitleNum; j++) { %>
       <div class="tab-pane fade show" id="<%= j %>" role="tabpanel">
         <div class="container-fluid">
-            <form action=""><input class="checkSub" type="checkbox"></form>
+            <form action=""><input class="checkSub" type="checkbox" </form>
             <div class="row aboveTabCard" data-masonry='{"percentPosition": true}'>
             <!-- 소제목에 따라 피드들 서버 사이드 렌더링 부분 -->
               <% if (feedArray) { %>

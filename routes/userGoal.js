@@ -37,7 +37,6 @@ router.get('/', function (req, res, next) {
 
   const pk = req.query.pk; // 쿼리 파라미터 pk 값
   const { loginUser, userContent } = require('./login.js');
-  console.log(loginUser.pk);
   console.log(userContent);
   // headTitle과 pk를 사용하여 필요한 처리 수행
 
@@ -71,8 +70,10 @@ router.get('/', function (req, res, next) {
 
   /** end */
   let subTitleNum = activeSubTitle.length;
-  // console.log("#############"+filteredFeedArray);
-  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray, subTitles: activeSubTitle, tabTarget: "1", subTitleNum: subTitleNum });
+  console.log("subTitles"+activeSubTitle);
+  
+  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray, 
+    subTitles: activeSubTitle, tabTarget: "1", subTitleNum: subTitleNum ,});
   // res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser,subTitles:activeSubTitle});
 });
 
@@ -84,6 +85,7 @@ router.get('/custom/goal', (req, res, next) => {
   const subTitlePK = Number(req.query.subTitlePK);
   const tabTarget = req.query.tabTarget;
   const subTitleNumber = req.query.subTitleNum;
+  const checked=req.query.subChecked;
   // console.log(subTitleNumber);
   // console.log("##############"+headTitle);
   // const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
@@ -96,11 +98,14 @@ router.get('/custom/goal', (req, res, next) => {
       filteredFeedArray.push(feed);
     }
   });
-  // filteredFeedArray = feedArray.filter(feed => { console.log("**feed**"+feed.subTitlePK);return feed.subTitlePK == Number(subTitlePK) });
-  // console.log("ㄴㅇㅁㄴㅇㅁㄴ"+filteredFeedArray.length);
+  filteredFeedArray = feedArray.filter(feed => { 
+    return feed.subTitlePK == Number(subTitlePK)
+  });
   // filteredFeedArray=JSON.stringify(filteredFeedArray);
 
-  ejs.renderFile('./views/goalCard.ejs', { userContent: userContent, loginUser: loginUser, subTitles: activeSubTitle, headTitle: headTitle, feedArray: filteredFeedArray, tabTarget: tabTarget, subTitleNum: subTitleNumber,subChecked:checked}, function (err, renderedHTML) {
+
+  ejs.renderFile('./views/goalCard.ejs', { userContent: userContent, loginUser: loginUser, subTitles: activeSubTitle, headTitle: headTitle, feedArray: filteredFeedArray, 
+    tabTarget: tabTarget, subTitleNum: subTitleNumber,subChecked:checked}, function (err, renderedHTML) {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
@@ -179,6 +184,7 @@ router.post('/post/subTitle', function (req, res) {
   localStorage.setItem('subTitle', JSON.stringify(currentSubTitle));
   res.sendStatus('200');
 });
+
 router.post('/sub/edit', function (req, res) {
   const obj = JSON.parse(JSON.stringify(req.body));
   let editSubTitlePK = obj.subPK;
@@ -196,21 +202,55 @@ router.post('/sub/edit', function (req, res) {
 router.post('/goalRate', function (req, res) {
   const obj = JSON.parse(JSON.stringify(req.body));
   console.log(obj);
-  const titleFile = localStorage.getItem("title");
-  let titleArray = JSON.parse(titleFile);
-  titleArray.forEach((title) => {
-    if (title.titlePK == obj.titlePK) {
-      title.goalRate = parseFloat(Number(obj.check_cnt) / Number(obj.subNum)).toPrecision(2);
-      console.log(title.goalRate);
-      return;
+  calcuGoalRate(obj.titlePK, obj.check_cnt, obj.subNum);
+
+  let subTitles = localStorage.getItem('subTitle');
+  subTitles = JSON.parse(subTitles);
+  subTitles.forEach(sub => {
+    if (sub.subTitlePK === obj.subPK) {
+      console.log(sub.subTitle)
+      sub.checked = 1;
     }
   });
-  localStorage.setItem("title", JSON.stringify(titleArray));
-  res.status(200);
+  localStorage.setItem('subTitle', JSON.stringify(subTitles));
+  
+  res.sendStatus(200);
 });
 
 
 router.post('/sub/del', function (req, res) {
+  const delSubTitlePK = req.body.activeTab;
+  const titlePK=req.body.titlePK;
+  const subNum=req.body.subNum;
 
+  let subTitles = localStorage.getItem("subTitle");
+  subTitles = JSON.parse(subTitles);
+  let newSubTitles = subTitles.filter(sub => sub.subTitlePK !== delSubTitlePK);
+  
+  newSubTitles = JSON.stringify(newSubTitles);
+  console.log(newSubTitles);
+  localStorage.setItem("subTitle", newSubTitles);
+  // TODO 삭제 시 달성률 재계신 필요
+  // $.post('/user/goal/sub/del',{activeTab:activeTab,subNum:$('.nav-link.custom-button').length,titlePK:titlePK},function(response){
+
+  // 달성률 재계산
+  let cnt=0;
+  subTitles.forEach(sub=>{
+    if(sub.checked===1)cnt++;
+  })
+  console.log(titlePK,cnt,subNum);
+  calcuGoalRate(titlePK,cnt,subNum);
+  
 });
+function calcuGoalRate(titlePK,check_cnt,subNum){
+  const titleFile = localStorage.getItem("title");
+  let titleArray = JSON.parse(titleFile);
+  titleArray.forEach((title) => {
+    if (title.titlePK == titlePK) {
+      title.goalRate = parseFloat(Number(check_cnt) / Number(subNum)).toPrecision(2);
+      return;
+    }
+  });
+  localStorage.setItem("title", JSON.stringify(titleArray));
+}
 module.exports = router;

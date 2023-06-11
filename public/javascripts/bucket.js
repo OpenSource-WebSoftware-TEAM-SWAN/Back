@@ -50,15 +50,31 @@ function onTab() {
   pos = ({ left: pos.left + tmpWidth, top: pos.top })
   $('.delSub').offset(pos).on('click', function () {
     let tmpId = currentTab.attr('data-index');
+    const activeTab=$('.custom-button.active').attr('id');
+    const url = new URL(window.location.href);
+    const urlParams = url.searchParams;
+    const titlePK = urlParams.get('pk');
+
     $('#'+tmpId).remove();
     currentTab.remove();
     $('.editSub').css('display', 'none');
     $('.delSub').css('display', 'none');
+    //TODO 삭제 전에 post요청으로 재계산 가능한지 TEST
+    // getCheckPercentage();
+    // 텝 식제 요청
+    $.post('/user/goal/sub/del',{activeTab:activeTab,subNum:$('.nav-link.custom-button').length,titlePK:titlePK},function(response){
+      console.log(response);
+    })
+    // $.post('/user/goal/goalRate',{check_cnt:check_cnt,titlePK:titlePK,subNum:$('.nav-link.custom-button').length},
   });
 
 }
 
 $(document).ready(function () {
+    // 홈버튼
+    $('.btnHome').click(function(){
+      location.href = '/swan';
+    });
   // Masonry 초기화
   var $grid = $(".row").masonry({
     percentPosition: true,
@@ -79,6 +95,7 @@ $(document).ready(function () {
     });
     getCheckPercentage();
   });
+
 // 퍼센티지 구하기
 function getCheckPercentage(){
   var check_cnt=0;
@@ -86,13 +103,11 @@ function getCheckPercentage(){
 
   $('.checkSub').each(function(){
     if ($(this).is(":checked")) {
-      console.log("###############")
       check_cnt++;
       const url = new URL(window.location.href);
       const urlParams = url.searchParams;
       const titlePK = urlParams.get('pk');
-      console.log(titlePK);
-      $.post('/user/goal/goalRate',{check_cnt:check_cnt,titlePK:titlePK,subNum:$('.nav-link.custom-button').length,checked:1},function (response) {
+      $.post('/user/goal/goalRate',{check_cnt:check_cnt,titlePK:titlePK,subNum:$('.nav-link.custom-button').length,subPK:$('.custom-button.active').attr('id')},function (response) {
         console.log(response); // 서버 응답 확인
       });
     }
@@ -106,11 +121,14 @@ function getCheckPercentage(){
     var subPK = $(".nav-link.custom-button.active").attr("id");
     let subTabTarget = $(this).attr('data-index');
     let headTitle=$('#pageHeader').children().text();
+    let subChecked=$('#subCheck').is(':checked');
+    subChecked=subChecked?1:0;
     // URL에 파라미터 추가
     var url = new URL(window.location.href);
     url.searchParams.set("subTitlePK", subPK);
     history.pushState(null, "", url.toString());
-    $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length},function(data){
+    console.log("tab click event : "+headTitle,subPK,subTabTarget)
+    $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length,subChecked:subChecked},function(data){
       $('.aboveTabCard').html(data);
     });
 
@@ -128,6 +146,7 @@ $('.linkPlus').click(function () {
   subTitlePkDate = String(subTitlePkDate);
   const urlParams = new URLSearchParams(window.location.search);
   const pk = urlParams.get('pk');
+  
   // 버튼 내용
   str =
     '<button class="nav-link custom-button" ' +
@@ -165,7 +184,7 @@ $('.linkPlus').click(function () {
 
           return $('<button class="nav-link custom-button" data-bs-toggle="tab" data-bs-target="#' + tmpNav + '" data-index="' + tmpNav + '" type="button" ' +
             'role="tab" aria-controls="' + tmpNav + '" aria-selected="false" id=' + subTitlePkDate + ' onclick="onTab();" >' + newGoalElement + ' </button>');
-        });
+        });0
 
       }
     }).on('blur', function () {
