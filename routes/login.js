@@ -7,20 +7,21 @@ const { stringify } = require('querystring');
 const { LocalStorage } = require('node-localstorage');
 const fs = require('fs');
 const crypto = require('crypto');
+const { loadavg } = require('os');
 
 
 // 로컬 스토리지 인스턴스 생성
 const localStorage = new LocalStorage('./scratch/userJSON');
 const contnetLocalStorage = new LocalStorage('./scratch/contentJSON');
-
+let userContent = [];
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('about');
 });
-router.get('/login',function(req,res,next){
+router.get('/login', function (req, res, next) {
   res.render("login");
 });
-router.get('/signup',function(req,res,next){
+router.get('/signup', function (req, res, next) {
   res.render("signup");
 });
 /* POST reigster page */
@@ -31,6 +32,7 @@ router.post('/register', function (req, res) {
 
   let userArray = [];
   let maxPk = 0;
+
 
   let checkUserJson = localStorage.getItem("user");
   if (checkUserJson) {
@@ -63,6 +65,8 @@ router.post('/register', function (req, res) {
 router.post('/swan', function (req, res) {
   const email = req.body.userID;
   const pw = req.body.userPW;
+  let labels = [];
+  let data = [];
 
   let loginUser = null;
 
@@ -74,18 +78,18 @@ router.post('/swan', function (req, res) {
       loginUser = user;
       return;
     }
-    
+
   });
-  
+
   if (loginUser) {
     // 로그인 성공
     const authUser = loginUser.pk; // loginUser 객체에서 pk 속성에 접근하여 authUser 변수에 할당
 
     let titleArray = [];
-    let userContent = [];
+    
 
     let checkTitleJson = contnetLocalStorage.getItem("title");
-    
+
     if (checkTitleJson) {
       titleArray = JSON.parse(checkTitleJson);
 
@@ -93,16 +97,29 @@ router.post('/swan', function (req, res) {
         if (title.userPK === authUser) {
           userContent.push(title);
         }
+
       });
+
+      
     }
-    
+
     module.exports = { loginUser, userContent };
 
-    res.render('swan', { userName: loginUser.name, userContent: userContent });
+    res.render('swan', { userName: loginUser.name, userContent: userContent});
   } else {
     // 로그인 실패
     res.send("<script>alert('로그인 실패');window.location.href='/'</script>");
   }
+});
+router.get('/swan/chart/data',function(req,res){
+  let labels=[];
+  let data=[];
+  userContent.forEach(title => {
+    labels.push(title.headTitle);
+    data.push(title.goalRate);
+  })
+  console.log("차트 데이터 : "+labels,data)
+  res.json({labels:labels,data:data})
 });
 
 module.exports = router;

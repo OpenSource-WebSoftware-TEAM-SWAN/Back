@@ -45,17 +45,17 @@ $(document).ready(function () {
         "<button class='delGoal'>삭제</button>" +
         "</div></li>" +
         "</ul>";
-
+        
         $('.headline-info').prepend(str);
         titleCnt++;
 
         $('#temp').attr("id", pkDate);
+        let headTitle=$('.add-title').next().children().children().children()[0].text
         $.post('/swan/sendTitle', {
-            headTitle: $('.aGoal')[0].text,
+            headTitle: headTitle,
             titlePk: pkDate
         });
         $('.elementGoal').hover(function () {
-            // alert("fudk");
             $(this).children('.exception').children('div').children('.editGoal').css('display', 'inline-block');
             $(this).children('.exception').children('div').children('.delGoal').css('display', 'inline-block');
         }, function () {

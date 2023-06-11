@@ -58,7 +58,7 @@ $(document).ready(function () {
             let imageUrl=file?URL.createObjectURL(file):'/images/monarisa.jpg'
             let str =
                 '<div class="col-6 col-md-4 col-lg-3">' +
-                '<div class="card">' +
+                '<div class="card" onClick="seedShow()">' +
                 '<img src="' + imageUrl + '" class="card-img-top">'  + // 내부 이미지의 첫 번째
                 '<div class="card-body">' +
                 '<div class="card-text">' +
@@ -78,21 +78,10 @@ $(document).ready(function () {
 
             // 피드 보기
             $('.card').click(function () {
-                $('.seedViewBg').css('display', 'block');
-                $('.seedView').css('display', 'block');
-                $('.seedViewClose').css('display', 'block');
-                $('.seedViewClose').click(function () {
-                    $('.seedViewBg').css('display', 'none');
-                    $('.seedView').css('display', 'none');
-                });
-                $('.seedViewBg').click(function () {
-                    $('.seedViewBg').css('display', 'none');
-                    $('.seedView').css('display', 'none');
-                });
-                var tmpPos = $(this).children('div').children('div');
-                $('seedViewTime').text($(tmpPos).children('p').first().text());
-                $('seedViewGoal').children('h2').text($(tmpPos).children('h3').text());
-                $('seedViewMemo').children('p').text($(tmpPos).children('p').last().text());
+                let pos=$(this).children('div').children('div');
+                $('.seedView_goal').text(pos.children('h3').text());
+                $('.seedView_memo').text(pos.children('p:eq(0)').text());
+                $('.seedView_time').text(pos.children('p:eq(1)').text());
             });
             
             

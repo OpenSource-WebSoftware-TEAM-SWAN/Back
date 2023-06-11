@@ -25,7 +25,7 @@ router.get('/', function (req, res, next) {
             userCalendar = JSON.parse(data);
         }
         calendarList = userCalendar.filter(calendar => calendar.userPK === loginUser.pk);
-        console.log(calendarList);
+        // console.log(calendarList);
         res.json(calendarList);
     });
 });

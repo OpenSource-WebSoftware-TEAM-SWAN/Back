@@ -70,15 +70,16 @@ router.get('/', function (req, res, next) {
   }
 
   /** end */
-
+  let subTitleNum = activeSubTitle.length;
   // console.log("#############"+filteredFeedArray);
-  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray, subTitles: activeSubTitle, tabTarget: "1" });
+  res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser, feedArray: filteredFeedArray, subTitles: activeSubTitle, tabTarget: "1", subTitleNum: subTitleNum });
   // res.render('bucket', { headTitle: headTitle, userContent: userContent, loginUser: loginUser,subTitles:activeSubTitle});
 });
 
 
 // feed rendering
 router.get('/custom/goal', (req, res, next) => {
+  const { loginUser, userContent } = require('./login.js');
   const headTitle = req.query.headTitle; // 쿼리 파라미터 headTitle 값
   const subTitlePK = Number(req.query.subTitlePK);
   const tabTarget = req.query.tabTarget;
@@ -98,17 +99,13 @@ router.get('/custom/goal', (req, res, next) => {
   // filteredFeedArray = feedArray.filter(feed => { console.log("**feed**"+feed.subTitlePK);return feed.subTitlePK == Number(subTitlePK) });
   // console.log("ㄴㅇㅁㄴㅇㅁㄴ"+filteredFeedArray.length);
   // filteredFeedArray=JSON.stringify(filteredFeedArray);
-  filteredFeedArray.forEach(feed => {
-    console.log("as" + feed.subTitlePK);
-  });
-  console.log("%^%^%^%^"+activeSubTitle);
-  ejs.renderFile('./views/goalCard.ejs', { subTitles: activeSubTitle, headTitle: headTitle, feedArray: filteredFeedArray, tabTarget: tabTarget, subTitleNum: subTitleNumber }, function (err, renderedHTML) {
+
+  ejs.renderFile('./views/goalCard.ejs', { userContent: userContent, loginUser: loginUser, subTitles: activeSubTitle, headTitle: headTitle, feedArray: filteredFeedArray, tabTarget: tabTarget, subTitleNum: subTitleNumber,subChecked:checked}, function (err, renderedHTML) {
     if (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
       return;
     }
-
     res.send(renderedHTML);
   });
 });
@@ -168,7 +165,8 @@ router.post('/post/subTitle', function (req, res) {
   const subTitleData = {
     subTitlePK: subTitlePK,
     TitlePK: TitlePK,
-    subTitle: subTitle
+    subTitle: subTitle,
+    checked:0
   }
   let currentSubTitle = localStorage.getItem("subTitle");
   if (currentSubTitle) {
@@ -181,15 +179,39 @@ router.post('/post/subTitle', function (req, res) {
   localStorage.setItem('subTitle', JSON.stringify(currentSubTitle));
   res.sendStatus('200');
 });
-router.post('/sub/edit',function(req,res){
+router.post('/sub/edit', function (req, res) {
   const obj = JSON.parse(JSON.stringify(req.body));
-  let editSubTitlePK=obj.subPK;
-  let editVal=obj.editVal;
-  const subTitleFile=fs.readFileSync('./scratch/contentJSON/subTitle');
-  const subTitles=JSON.parse(subTitleFile);
-  subTitles.find((sub)=>{
-    if(sub==editSubTitlePK)sub.subTitle=editVal;
-  })
-})
+  let editSubTitlePK = obj.subPK;
+  let editVal = obj.editVal;
+  const subTitleFile = localStorage.getItem("subTitle");
+  subTitleArray = JSON.parse(subTitleFile);
+  subTitleArray.forEach((sub) => {
+    if (sub.subTitlePK == editSubTitlePK) sub.subTitle = editVal;
+  });
+  localStorage.setItem("subTitle", JSON.stringify(subTitleArray));
 
+  res.send('Success');
+});
+
+router.post('/goalRate', function (req, res) {
+  const obj = JSON.parse(JSON.stringify(req.body));
+  console.log(obj);
+  const titleFile = localStorage.getItem("title");
+  let titleArray = JSON.parse(titleFile);
+  console.log(titleArray);
+  titleArray.forEach((title) => {
+    if (title.titlePK == obj.titlePK) {
+      title.goalRate = parseFloat(Number(obj.check_cnt) / Number(obj.subNum));
+      return;
+    }
+  });
+  localStorage.setItem("title", JSON.stringify(titleArray));
+
+  res.status(200);
+});
+
+
+router.post('/sub/del', function (req, res) {
+
+});
 module.exports = router;

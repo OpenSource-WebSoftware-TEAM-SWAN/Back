@@ -22,14 +22,14 @@ router.post('/sendTitle', function (req, res) {
   const {loginUser,userContent} = require('./login.js');
   const headTitle = req.body.headTitle;
   const titlePK=req.body.titlePk;
-
+  const goalRate=0;
   let currentTitle = localStorage.getItem('title');
-  console.log(headTitle,titlePK);
+  console.log(loginUser.pk,headTitle,titlePK);
   if (currentTitle) {
     currentTitle = JSON.parse(currentTitle);
-    currentTitle.push({ userPK: loginUser['pk'], titlePK: titlePK, headTitle: headTitle });
+    currentTitle.push({ userPK: loginUser['pk'], titlePK: titlePK, headTitle: headTitle,goalRate:0});
   } else {
-    currentTitle = [{ userPK: loginUser['pk'], titlePK: titlePK , headTitle: headTitle }];
+    currentTitle = [{ userPK: loginUser['pk'], titlePK: titlePK , headTitle: headTitle,goalRate:0 }];
   }
 
   localStorage.setItem('title', JSON.stringify(currentTitle));
@@ -38,7 +38,6 @@ router.post('/sendTitle', function (req, res) {
 
 router.get('/getTitlePk', function (req, res) {
   const sendTitlePk = req.query.sendTitlePk; // 클라이언트에서 전달된 sendTitlePk 값
-  console.log("send title pk value : " + sendTitlePk);
   let checkTitleJson = localStorage.getItem("title");
   if (checkTitleJson) {
     let titleArray = JSON.parse(checkTitleJson);
@@ -72,7 +71,6 @@ router.post('/edit', function (req, res) {
         title.headTitle = newGoalElement;
       }
     });
-    console.log(titleArray);
     localStorage.setItem("title", JSON.stringify(titleArray));
     res.sendStatus(200);
   } else {

@@ -128,6 +128,30 @@ body {
   background-color: transparent;
 }
 
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.checkSub{
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: inline-block;
+  position: fixed !important;
+  top: 80%!important;
+  left: 95%!important;
+}
+
+.checkSub:checked{
+  background-color: #337ab7;
+  border-color: #337ab7;
+  color: #fff;
+}
+
 .linkPlus:hover{
   color: #747373;
   background-color: rgba(0,0,0,0.1);

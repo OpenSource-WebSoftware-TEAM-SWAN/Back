@@ -9,11 +9,10 @@
     integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script defer src="/javascripts/mainJquery.js"></script>
   <script defer src="/javascripts/navibar.js"></script>
   <script defer src="/javascripts/writeSeed.js"></script>
   <link href="/stylesheets/bucket.css" rel="stylesheet">
-  <link href="/stylesheets/seedShow.css" rel="stylesheet">
+  <link href="/stylesheets/showSeed.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -56,11 +55,17 @@
   </div>
 
   <!--피드 뷰 모달---------------------------------------------------------------->
-  <div class="seedViewBg">
-    <div class="seedView">
-      <%- include('seedShow') %>
-        <i class="fas fa-thin fa-xmark seedViewClose"></i>
+  <div class="seedViewBg"></div>
+  <div class="seedView">
+    <div class="seedView_imgs">
+      <img src="images/night4.jpg" alt="">
     </div>
+    <div class="seedView_text">
+      <p class="seedView_goal">골</p>
+      <p class="seedView_memo">메모</p>
+      <p class="seedView_time">시간</p>
+    </div>
+
   </div>
 
   <!--네비바 버튼-------------------------------------------------------->
@@ -79,7 +84,9 @@
             <img src="/images/profile.jpg" alt="user image" style="width: 100%;">
           </div>
           <div class="user-infoStat">
-            <p id="userName"><%= loginUser.name %></p>
+            <p id="userName">
+              <%= loginUser.name %>
+            </p>
             <p id="userIntro">오늘도 힘차고 굳센 하루!</p>
           </div>
         </div>
@@ -103,8 +110,8 @@
             <% userContent.reverse().forEach((item,index)=>{ %>
               <% if(index < 3){ %>
                 <%- include('navContent',{userItem:item}) %>
-              <% } %>
-            <% }) %>
+                  <% } %>
+                    <% }); %>
           </div>
         </div>
         <!-- END Recent Seeds -->
@@ -114,7 +121,7 @@
         <div class="headline-info" id="headline">
           <% userContent.reverse().forEach(function(item) { %>
             <%- include('navContent',{userItem:item}) %>
-          <% }); %>
+              <% }); %>
         </div class="btntoTop">
         <!-- END headline toggle -->
         <div class="btntoTop">
@@ -139,9 +146,8 @@
               <button class="nav-link custom-button" id="<%= sub.subTitlePK %>" data-bs-toggle="tab"
                 data-bs-target="#<%= i %>" type="button" role="tab" aria-controls="<%= i %>" aria-selected="false"
                 data-index="<%= i %>" onclick="onTab();" />
-              <%= sub.subTitle %>
-                </button>
-                <% }) %>
+              <%= sub.subTitle %></button>
+                <% }); %>
                   <!-- <button class="nav-link active custom-button" id="nav-fr-tab" data-bs-toggle="tab" data-bs-target="#nav-fr"
             type="button" role="tab" aria-controls="nav-fr" aria-selected="true" >프랑스</button> -->
                   <button class="nav-link linkPlus">+</button>
@@ -151,25 +157,19 @@
       </nav>
     </div>
     <div id="nav-tabContent" class="tab-content"><!--실제로 출력되는 부분-->
-      <% var j=0 %>
-        <% subTitles.forEach((sub)=>{ j++ %>
-          <div class="tab-pane fade show" id="<%= j %>" role="tabpanel">
-            <div class="container-fluid">
-              <div class="row" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
-                <div class="col-6 col-md-4 col-lg-3">
-                  <% if(feedArray){ %>
-                    <%- include('goalCard',{feedArray:feedArray}) %>
-                  <% } %>
-                </div>
-              </div>
+      <% for (var j = 1; j <= subTitleNum; j++) { %>
+      <div class="tab-pane fade show" id="<%= j %>" role="tabpanel">
+        <div class="container-fluid">
+            <form action=""><input class="checkSub" type="checkbox"></form>
+            <div class="row aboveTabCard" data-masonry='{"percentPosition": true}'>
+            <!-- 소제목에 따라 피드들 서버 사이드 렌더링 부분 -->
+              <% if (feedArray) { %>
+                  <%- include('goalCard', { feedArray: feedArray }) %>
+              <% } %>
             </div>
           </div>
-          <% }); %>
-
-            <!-- 소제목에 따라 피드들 서버 사이드 렌더링 부분 -->
-
-
-
+        </div>
+      <% } %>
     </div><!--nav-tabContent closing tag-->
     <div class="writebox">
       <button class="btnWrite"><img src="/images/plus.png" width="32px" height="32px"></button>
@@ -184,6 +184,7 @@
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
   <script defer src="/javascripts/bucket.js"></script>
+  <script defer src="/javascripts/showSeed.js"></script>
 </body>
 
 </html>

@@ -8,10 +8,15 @@ function onTab() {
 
   let currentTab = $(".nav-link:focus");
   const activeTab=$('.custom-button.active').attr('id');
+
+  // 이전에 연결된 클릭 이벤트 핸들러 제거
+  $('.editSub').off('click');
+  $('.delSub').off('click');
+  //탭 수정 버튼
   $('.editSub').offset(pos);
   $('.editSub').on('click', function () {
-    console.log("fuck you");
     let currentVal = $(currentTab).text();
+
     // $('.editSub').css('display', 'none');
     // $('.delSub').css('display', 'none');
     currentTab.css('display', 'none');
@@ -22,18 +27,21 @@ function onTab() {
     currentTab.next().focus();
     currentTab.next().select();
 
-    //탭 수정 버튼
     currentTab.next().on('keypress', function (e) {
       if (e.keyCode === 13) {
         currentTab.html(currentTab.next().val());
         currentTab.css('display', 'inline-block');
         currentTab.next().remove();
-        $.post('user/goal/sub/edit',{subPK:activeTab,editVal:currentVal})
+        console.log(activeTab,currentTab);
+        $.post('/user/goal/sub/edit',{subPK:activeTab,editVal:$('.custom-button.active').text() })
       }
     }).on('blur', function () {
       currentTab.html(currentTab.next().val());
       currentTab.css('display', 'inline-block');
       currentTab.next().remove();
+      $.post('/user/goal/sub/edit',{subPK:activeTab,editVal:$('.custom-button.active').text() },function (response) {
+        console.log(response); // 서버 응답 확인
+      });
     });
   });
 
@@ -41,16 +49,13 @@ function onTab() {
   let tmpWidth = $('.editSub').outerWidth();
   pos = ({ left: pos.left + tmpWidth, top: pos.top })
   $('.delSub').offset(pos).on('click', function () {
+    let tmpId = currentTab.attr('data-index');
+    $('#'+tmpId).remove();
     currentTab.remove();
     $('.editSub').css('display', 'none');
     $('.delSub').css('display', 'none');
   });
 
-  // // blur
-  // currentTab.on('blur', function () {
-  //   $('.editSub').css('display', 'none');
-  //   $('.delSub').css('display', 'none');
-  // });
 }
 
 $(document).ready(function () {
@@ -72,8 +77,28 @@ $(document).ready(function () {
       $currentTabContent.closest(".tab-content").scrollTop(0);
 
     });
+    getCheckPercentage();
   });
+// 퍼센티지 구하기
+function getCheckPercentage(){
+  var check_cnt=0;
+  var box_cnt=0;
 
+  $('.checkSub').each(function(){
+    if ($(this).is(":checked")) {
+      console.log("###############")
+      check_cnt++;
+      const url = new URL(window.location.href);
+      const urlParams = url.searchParams;
+      const titlePK = urlParams.get('pk');
+      console.log(titlePK);
+      $.post('/user/goal/goalRate',{check_cnt:check_cnt,titlePK:titlePK,subNum:$('.nav-link.custom-button').length,checked:1},function (response) {
+        console.log(response); // 서버 응답 확인
+      });
+    }
+    box_cnt++;
+  });
+  // alert(check_cnt*100/box_cnt);
   /* 소제목 버튼 클릭시 url에 추가  */
   $('.nav-link.custom-button').on('click', function () {
 
@@ -86,11 +111,11 @@ $(document).ready(function () {
     url.searchParams.set("subTitlePK", subPK);
     history.pushState(null, "", url.toString());
     $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length},function(data){
-      $('#'+subTabTarget).html(data);
+      $('.aboveTabCard').html(data);
     });
 
   });
-});
+}
 // 소제목 탭 함수 끝
 
 
@@ -125,7 +150,8 @@ $('.linkPlus').click(function () {
           let tmpStr =
             '<div class="tab-pane fade " id="' + tmpNav + '" role="tabpanel" aria-labelledby="' + tmpNav + '-tab">' +
             '<div class="container-fluid">' +
-            '<div class="row" data-masonry=' + tmpMasonry + '>' +
+            '<form action=""><input class="checkSub" type="checkbox"></form>'+
+            '<div class="row " data-masonry=' + tmpMasonry + '>' +
             '</div></div></div>'
           let tmpdiv = $('#nav-tabContent').append(tmpStr);
           tmpdiv.focus();
@@ -150,7 +176,8 @@ $('.linkPlus').click(function () {
         let tmpStr =
           '<div class="tab-pane fade " id="' + tmpNav + '" role="tabpanel" aria-labelledby="' + tmpNav + '-tab">' +
           '<div class="container-fluid">' +
-          '<div class="row" data-masonry=' + tmpMasonry + '>' +
+          '<form action=""><input class="checkSub" type="checkbox"></form>'+
+          '<div class="row " data-masonry=' + tmpMasonry + '>' +
           '</div></div></div>'
         let tmpdiv = $('#nav-tabContent').append(tmpStr);
         tmpdiv.focus();
@@ -158,7 +185,7 @@ $('.linkPlus').click(function () {
 
         // 서버와 통신  parameter : 소제목 소제목 pk값
         console.log(subTitlePkDate, newGoalElement);
-        $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement }, function (response) {
+        $.post('/user/goal/post/subTitle?pk=' + pk, { subTitlePK: subTitlePkDate, subTitle: newGoalElement}, function (response) {
           console.log(response); // 서버 응답 확인
         });
 
@@ -173,4 +200,4 @@ $('.linkPlus').click(function () {
   $('.custom-button').last().next().select();
   $('.custom-button').last().next().trigger('click');
 
-});
+});});
