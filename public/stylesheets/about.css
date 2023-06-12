@@ -121,6 +121,36 @@ margin-top: 5%;
 a {color: #d2d2d2; text-decoration: none; outline: none}
 
 a:hover, a:active {text-decoration: none; color:#000C3E;}
+.footer {
+  border-top: 1px solid #acb0ac;
+  color: #333;
+  position: fixed;
+  margin-top: 2%;
+  width: 70%;
+  text-align: right;
+  display: block;
+}
+
+.footer p{
+  margin-bottom: 0;
+}
+
+.finalprj {
+  font-size: 0.6rem;
+}
+
+#githubImg {
+  height: 16px;
+  width: 16px;
+}
+
+.footer a {
+  color: #333;
+}
+
+.footer a:hover {
+  color: #333;
+}
 
 @font-face {
     font-family: 'melona';

@@ -73,8 +73,6 @@ router.post('/swan', function (req, res) {
   let labels = [];
   let data = [];
 
-  
-
   const userJSONFile = fs.readFileSync('./scratch/userJSON/user', 'utf-8');
   const userArray = JSON.parse(userJSONFile);
   let userContent = [];
@@ -129,6 +127,10 @@ router.get('/swan/chart/data',function(req,res){
   })
   res.json({labels:labels,data:data})
 });
+// router.get('',function{
+//   const userImages = contnetLocalStorage.getItem('feed');
+
+// });
 function getUserContent(){
   let checkTitleJson = contnetLocalStorage.getItem("title");
   let titleArray = JSON.parse(checkTitleJson);

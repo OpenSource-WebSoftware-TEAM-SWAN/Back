@@ -1,6 +1,6 @@
 <% feedArray.forEach(feed=>{ %>
     <div class="col-6 col-md-4 col-lg-3">
-        <div class="card">
+        <div class="card" onclick="showSeed()">
             <img src="<%= feed.feedImgPath %>" class="card-img-top">
             <!-- feed Image -->
             <div class="card-body">
@@ -11,9 +11,16 @@
                     <p>
                         <%= feed.feedMemo %>
                     </p>
-                    <p style="text-align:right;"> time </p>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        var $grid = $(".row").masonry({
+            percentPosition: true,
+            // 필요한 Masonry 옵션들을 설정해주세요
+          });
+        $grid.masonry('reloadItems');
+        $grid.masonry("layout");
+    </script>
 <% }); %>

@@ -1,9 +1,7 @@
 var imgArray=[]
 
 $(document).ready(function () {
-    $('img').on("error", function () {
-        $(this).attr("src", "/images/이지형.png");
-    });
+    
 
     let $grid2 = $(".row").masonry({
         percentPosition: true,
@@ -41,12 +39,12 @@ $(document).ready(function () {
         if ($('#seedGoal').val() != 0) {
             let selectedTab = $('#nav-tabContent .tab-pane.active');
             let putArea = selectedTab.children('div').children('div');
-            let h = new Date().getHours() + ':';
-            let m = new Date().getMinutes() + ' ';
-            let date = new Date().getDate() + '/';
-            let month = parseInt(new Date().getMonth() + 1) + '/';
-            let year = new Date().getFullYear();
-            let time = '' + h + m + date + month + year;
+            // let h = new Date().getHours() + ':';
+            // let m = new Date().getMinutes() + ' ';
+            // let date = new Date().getDate() + '/';
+            // let month = parseInt(new Date().getMonth() + 1) + '/';
+            // let year = new Date().getFullYear();
+            // let time = '' + h + m + date + month + year;
             let feedGoal = $('#seedGoal').val();
             let feedMemo = $('#seedMemo').val();
             let fileInput = $('#uploadImg');
@@ -55,7 +53,8 @@ $(document).ready(function () {
             if (fileInput[0].files && fileInput[0].files.length > 0) {
                 file = fileInput[0].files[0];
             }
-            let imageUrl=file?URL.createObjectURL(file):'/images/monarisa.jpg'
+            let imageUrl=file?URL.createObjectURL(file):''
+            // let imageUrl=""
             let str =
                 '<div class="col-6 col-md-4 col-lg-3">' +
                 '<div class="card" onClick="showSeed()">' +
@@ -64,7 +63,6 @@ $(document).ready(function () {
                 '<div class="card-text">' +
                 '<h3>' + $('#seedGoal').val() + '</h3>' + // 피드 제목
                 '<p>' + $('#seedMemo').val() + '</p>' + // 피드 메모
-                '<p style="text-align:right;">' + time + '</p>' + // 게시 시간
                 '</div></div></div></div>';
             putArea.append(str);
             let $grid2 = $(".row").masonry({
@@ -141,7 +139,8 @@ $(document).ready(function () {
     const writeSeedClose = document.querySelector('.writeSeedClose');
     const btnWrite = document.querySelector('.btnWrite');
 
-    btnWrite.addEventListener('click', () => {
+    btnWrite.addEventListener('click', (e) => {
+        e.preventDefault();
         writeSeed.style.display = 'inline-block';// 화면 고정
         bodyBucket.style.overflow = 'hidden';
     });
@@ -155,7 +154,6 @@ $(document).ready(function () {
         }
     });
 
-    // TODO 렌더링 되는 이미지들  masonry적용 안되는 이유?
     $grid2.masonry('reloadItems');
     $grid2.masonry('layout');
 });

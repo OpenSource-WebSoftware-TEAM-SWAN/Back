@@ -117,6 +117,7 @@ router.get('/custom/goal', (req, res, next) => {
 
 // feed 작성 POST 요청을 처리하는 핸들러 함수
 router.post('/write/feed', upload.single('feedImage'), (req, res) => {
+  const { loginUser, userContent } = require('./login.js');
   if (req.file) {
     const feedGoal = req.body.feedGoal;
     const feedMemo = req.body.feedMemo;
@@ -128,9 +129,9 @@ router.post('/write/feed', upload.single('feedImage'), (req, res) => {
     let currentFeed = localStorage.getItem('feed');
     if (currentFeed) {
       currentFeed = JSON.parse(currentFeed);
-      currentFeed.push({ subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath });
+      currentFeed.push({ userPK:loginUser.pk,subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath });
     } else {
-      currentFeed = [{ subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath }];
+      currentFeed = [{ userPK:loginUser.pk,subTitlePK: subTitlePK, feedGoal: feedGoal, feedMemo: feedMemo, feedImgPath: feedImgPath }];
     }
     localStorage.setItem('feed', JSON.stringify(currentFeed));
 

@@ -27,7 +27,8 @@ $(document).ready(function () {
                 label: "Goal Rate of Titles",
                 data: data, // 데이터별 퍼센티지
                 borderWidth: 1,
-                backgroundColor: "rgba(0, 12, 62, 0.75)",
+                backgroundColor: "rgba(0, 12, 150, 0.5)",
+                borderRadius: 16,
                 borderColor: "rgba(0, 12, 62, 1)",
               },
             ],

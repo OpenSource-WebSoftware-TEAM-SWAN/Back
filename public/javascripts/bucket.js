@@ -71,29 +71,35 @@ function onTab() {
 }
 
 $(document).ready(function () {
+  
+
     // 홈버튼
     $('.btnHome').click(function(){
       location.href = '/swan';
     });
   // Masonry 초기화
-  var $grid = $(".row").masonry({
-    percentPosition: true,
-    // 필요한 Masonry 옵션들을 설정해주세요
-  });
+  
 
   // 탭 변경 이벤트 핸들러
   $(".nav-link").on("shown.bs.tab", function () {
+    
+
+    
     // 현재 탭의 컨텐츠에 있는 이미지들을 로드
     var $currentTabContent = $($(this).attr("data-bs-target")).find(".row");
     $currentTabContent.imagesLoaded(function () {
       // 이미지 로드 완료 후 Masonry 업데이트
+      $grid.masonry('reloadItems');
       $grid.masonry("layout");
-
       // 스크롤 초기화
       $currentTabContent.closest(".tab-content").scrollTop(0);
 
+
     });
     getCheckPercentage();
+    
+    
+
   });
 
 // 퍼센티지 구하기
@@ -115,7 +121,8 @@ function getCheckPercentage(){
   });
   // alert(check_cnt*100/box_cnt);
   /* 소제목 버튼 클릭시 url에 추가  */
-  $('.nav-link.custom-button').on('click', function () {
+  $('.nav-link.custom-button').on('click', function (event) {
+    
 
     // 현재 선택된 탭의 id 값을 가져옴
     var subPK = $(".nav-link.custom-button.active").attr("id");
@@ -127,7 +134,7 @@ function getCheckPercentage(){
     var url = new URL(window.location.href);
     url.searchParams.set("subTitlePK", subPK);
     history.pushState(null, "", url.toString());
-    console.log("tab click event : "+headTitle,subPK,subTabTarget)
+    
     $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length,subChecked:subChecked},function(data){
       $('.aboveTabCard').html(data);
     });
@@ -215,8 +222,7 @@ $('.linkPlus').click(function () {
       });
     });
   });
-  $('.custom-button').last().next().focus();
-  $('.custom-button').last().next().select();
-  $('.custom-button').last().next().trigger('click');
-
+  $('.linkPlus').prev().focus();
+  $('.linkPlus').prev().select();
+  
 });});

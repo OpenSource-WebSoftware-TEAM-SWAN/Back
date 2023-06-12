@@ -18,13 +18,14 @@ $(document).ready(function(){
 
         // 이미지 불러오기
         let src=$(this).children('img').attr('src');
+        console.log("123"+src);
         $('.seedView_imgs').children('img').attr('src',src);
 
         // 텍스트 불러오기
         $('.seedView_goal').text(pos.children('h3').text());
         $('.seedView_memo').text(pos.children('p:eq(0)').text());
         $('.seedView_time').text(pos.children('p:eq(1)').text());
-
+        
         $('.delPeed').click(function(){
             $('.seedViewBg').click();
             currentPeed.remove();
