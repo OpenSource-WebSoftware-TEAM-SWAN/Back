@@ -61,10 +61,12 @@ router.post('/register', function (req, res) {
 
   res.send('<script>alert("회원가입에 성공했습니다."); window.location.href="/";</script>');
 });
+
 //홈 버튼 눌렀을때
 router.get('/swan', function (req, res) {
   let userContent=getUserContent();
-  res.render('swan',{userName:loginUser.name,userContent:userContent});
+  const images=getUserImages();
+  res.render('swan',{userName:loginUser.name,userContent:userContent,images:images});
 });
 
 router.post('/swan', function (req, res) {
@@ -104,9 +106,9 @@ router.post('/swan', function (req, res) {
           userContent.push(title);
         }
       });
-    
+    const postingImages=getUserImages();
       module.exports = { loginUser, userContent };      
-      res.render('swan', { userName: loginUser.name, userContent: userContent });
+      res.render('swan', { userName: loginUser.name, userContent: userContent, images:postingImages});
     }
     
     
@@ -141,5 +143,12 @@ function getUserContent(){
         }
       });
   return userContent;
+}
+function getUserImages(){
+  let checkFeedJson=contnetLocalStorage.getItem('feed');
+  let feedArray=JSON.parse(checkFeedJson);
+  const feedImages=feedArray.filter(feed=>feed.userPK===loginUser.pk);
+  return feedImages;
+
 }
 module.exports = router;

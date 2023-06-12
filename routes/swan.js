@@ -11,8 +11,6 @@ let titleArray = [];
 // console.log(currentUser);
 /* GET swan page. */
 router.get('/', function (req, res, next) {
-
-
   // console.log("get SWAN PAGE: " + userContent);
   res.render('swan');
 });
