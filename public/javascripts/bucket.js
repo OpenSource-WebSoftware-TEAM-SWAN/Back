@@ -62,6 +62,7 @@ function onTab() {
     //TODO 삭제 전에 post요청으로 재계산 가능한지 TEST
     // getCheckPercentage();
     // 텝 식제 요청
+
     $.post('/user/goal/sub/del',{activeTab:activeTab,subNum:$('.nav-link.custom-button').length,titlePK:titlePK},function(response){
       console.log(response);
     })
@@ -71,6 +72,10 @@ function onTab() {
 }
 
 $(document).ready(function () {
+  var $grid = $(".row").masonry({
+    percentPosition: true,
+    // 필요한 Masonry 옵션들을 설정해주세요
+  });
   
 
     // 홈버튼
@@ -83,8 +88,7 @@ $(document).ready(function () {
   // 탭 변경 이벤트 핸들러
   $(".nav-link").on("shown.bs.tab", function () {
     
-
-    
+    console.log("nav change");
     // 현재 탭의 컨텐츠에 있는 이미지들을 로드
     var $currentTabContent = $($(this).attr("data-bs-target")).find(".row");
     $currentTabContent.imagesLoaded(function () {
@@ -94,13 +98,29 @@ $(document).ready(function () {
       // 스크롤 초기화
       $currentTabContent.closest(".tab-content").scrollTop(0);
 
-
     });
-    getCheckPercentage();
-    
-    
+    var subPK = $(".nav-link.custom-button.active").attr("id");
+    let subTabTarget = $(this).attr('data-index');
+    let headTitle=$('#pageHeader').children().text();
+    let subChecked=$('#subCheck').is(':checked');
+    subChecked=subChecked?1:0;
+    // URL에 파라미터 추가
+    var url = new URL(window.location.href);
+    url.searchParams.set("subTitlePK", subPK);
+    history.pushState(null, "", url.toString());
 
+    console.log("headTitle1 : "+headTitle);
+    console.log("headTitle2 : "+subPK);
+    console.log("headTitle3 : ");
+    console.log("headTitle4 : "+subChecked);
+    $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length,subChecked:subChecked},function(data){
+      $('.aboveTabCard').html(data);
+    });
   });
+  
+  $('.checkSub').on('click',function(){
+    getCheckPercentage();
+  })
 
 // 퍼센티지 구하기
 function getCheckPercentage(){
@@ -121,23 +141,22 @@ function getCheckPercentage(){
   });
   // alert(check_cnt*100/box_cnt);
   /* 소제목 버튼 클릭시 url에 추가  */
-  $('.nav-link.custom-button').on('click', function (event) {
-    
-
+  $('.nav-link.custom-button').on('click', function () {
+    console.log("nav click");
     // 현재 선택된 탭의 id 값을 가져옴
-    var subPK = $(".nav-link.custom-button.active").attr("id");
-    let subTabTarget = $(this).attr('data-index');
-    let headTitle=$('#pageHeader').children().text();
-    let subChecked=$('#subCheck').is(':checked');
-    subChecked=subChecked?1:0;
-    // URL에 파라미터 추가
-    var url = new URL(window.location.href);
-    url.searchParams.set("subTitlePK", subPK);
-    history.pushState(null, "", url.toString());
+    // var subPK = $(".nav-link.custom-button.active").attr("id");
+    // let subTabTarget = $(this).attr('data-index');
+    // let headTitle=$('#pageHeader').children().text();
+    // let subChecked=$('#subCheck').is(':checked');
+    // subChecked=subChecked?1:0;
+    // // URL에 파라미터 추가
+    // var url = new URL(window.location.href);
+    // url.searchParams.set("subTitlePK", subPK);
+    // history.pushState(null, "", url.toString());
     
-    $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length,subChecked:subChecked},function(data){
-      $('.aboveTabCard').html(data);
-    });
+    // $.get('/user/goal/custom/goal', { headTitle:headTitle,subTitlePK: subPK, tabTarget: subTabTarget,subTitleNum:$('.nav-link.custom-button').length,subChecked:subChecked},function(data){
+    //   $('.aboveTabCard').html(data);
+    // });
 
   });
 }

@@ -101,8 +101,6 @@ router.get('/custom/goal', (req, res, next) => {
   filteredFeedArray = feedArray.filter(feed => { 
     return feed.subTitlePK == Number(subTitlePK)
   });
-  // filteredFeedArray=JSON.stringify(filteredFeedArray);
-
 
   ejs.renderFile('./views/goalCard.ejs', { userContent: userContent, loginUser: loginUser, subTitles: activeSubTitle, headTitle: headTitle, feedArray: filteredFeedArray, 
     tabTarget: tabTarget, subTitleNum: subTitleNumber,subChecked:checked}, function (err, renderedHTML) {
@@ -202,7 +200,6 @@ router.post('/sub/edit', function (req, res) {
 
 router.post('/goalRate', function (req, res) {
   const obj = JSON.parse(JSON.stringify(req.body));
-  console.log(obj);
   calcuGoalRate(obj.titlePK, obj.check_cnt, obj.subNum);
 
   let subTitles = localStorage.getItem('subTitle');

@@ -107,6 +107,7 @@ router.post('/swan', function (req, res) {
         }
       });
     const postingImages=getUserImages();
+    req.session.loginUser=loginUser;
       module.exports = { loginUser, userContent };      
       res.render('swan', { userName: loginUser.name, userContent: userContent, images:postingImages});
     }
@@ -117,6 +118,16 @@ router.post('/swan', function (req, res) {
     res.send("<script>alert('로그인 실패');window.location.href='/'</script>");
   }
 });
+
+router.get('/logout', function (req, res) {
+  req.session.destroy(function (err) {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('/');
+  });
+});
+
 router.get('/swan/chart/data',function(req,res){
   let labels=[];
   let data=[];
@@ -149,6 +160,5 @@ function getUserImages(){
   let feedArray=JSON.parse(checkFeedJson);
   const feedImages=feedArray.filter(feed=>feed.userPK===loginUser.pk);
   return feedImages;
-
 }
 module.exports = router;

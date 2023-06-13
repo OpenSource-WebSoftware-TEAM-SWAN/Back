@@ -85,7 +85,7 @@
   <div id="pageHeader">
     <h1 class="swan-logo">SWAN</h1>
     <div class="logout-btn">
-        <button class="btnLogout" onclick="alert('logout!')"><a href="/">Logout</a></button>
+        <button class="btnLogout" onclick="alert('logout!')"><a href="/logout">Logout</a></button>
     </div>
   </div>
   <div id="tabs">
@@ -110,12 +110,17 @@
 <div class="downpage section">
     <div class="container-fluid">
         <div class="row" id="images-container" data-masonry='{"percentPosition": true}'><!--row class에 Masonry 추가-->
-          
-          <div class="col-6 col-md-4 col-lg-3">
-            <div class="card">
-              <img src="/images/tower.jpg" class="card-img-top">
+          <% var i=0; %>
+          <% images.forEach(img=>{ %>
+            <% if(i < 10){ %>
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card">
+                <img src="<%= img.feedImgPath %>" class="card-img-top">
+              </div>
             </div>
-          </div>
+            <% i++;} %>
+          <% }) %>
+          
           
       </div><!--row closing tag-->
     </div><!--container-fluid closing tag-->
